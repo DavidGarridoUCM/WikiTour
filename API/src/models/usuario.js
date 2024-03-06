@@ -1,7 +1,6 @@
 'use strict'
 var {isEmail} = require('validator');
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
 
 var userRedSchema = mongoose.Schema({
     nombre: {
@@ -74,6 +73,5 @@ var userSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Usuario', userSchema);
-
 
 
