@@ -20,13 +20,64 @@ var userRedPSchema = mongoose.Schema({
     puntuacion: Number
 });
 
-var etapaSchema = mongoose.Schema({
+var cambioSchema = mongoose.Schema({
+    titulo: {
+        type: String,
+        required: true
+    },
+    texto: {
+        type: String,
+        required: true
+    },
+    adjuntos:[adjuntoSchema],
+    usuario:{
+        type: userRedPSchema,
+        required: true
+    },
+    fecha:{
+        type: Date, 
+        default: Date.now
+    }
+});
 
-})
+var adjuntoSchema = mongoose.Schema({
+    tipo: {
+        type: String,
+        enum: ['ubicacion', 'imagen', 'link'],
+        required: true
+    },
+    adjunto: {
+        type: String,
+        required: true
+    }
+});
+
+var etapaSchema = mongoose.Schema({
+    titulo: {
+        type: String,
+        required: true
+    },
+    texto: {
+        type: String,
+        required: true
+    },
+    adjuntos:[adjuntoSchema],
+    cambios:[cambioSchema],
+    tipo:{
+        type: String,
+        enum: ['original', 'nueva'],
+        default:'original',
+        required: true
+    }
+});
 
 var comentSchema = mongoose.Schema({
-
-})
+    texto: {
+        type: String,
+        required: true
+    },
+    likes: Number
+});
 
 var publicacion = mongoose.Schema({
     usuario: userRedPSchema,
@@ -55,3 +106,5 @@ var publicacion = mongoose.Schema({
         required: true
     }
 });
+
+module.exports = mongoose.model('Publicacion', publicacion);

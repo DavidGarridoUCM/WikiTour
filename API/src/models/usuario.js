@@ -33,6 +33,40 @@ var notiSchema = mongoose.Schema({
     }
 });
 
+var adjuntoSchema = mongoose.Schema({
+    tipo: {
+        type: String,
+        enum: ['ubicacion', 'imagen', 'link'],
+        required: true
+    },
+    adjunto: {
+        type: String,
+        required: true
+    }
+});
+
+var mensajeSchema = mongoose.Schema({
+    texto:{
+        type: String,
+        required: true
+    },
+    adjuntos: [adjuntoSchema],
+    fecha: {
+        type: Date, 
+        default: Date.now
+    }
+});
+
+var conversacionSchema = mongoose.Schema({
+    usuarioEmisor: userRedSchema,
+    mensajes: [mensajeSchema],
+    estado:{
+        type: String,
+        enum: ['leida', 'sin leer'],
+        default: 'sin leer'
+    }
+});
+
 var userSchema = mongoose.Schema({
     nombre: {
         type: String,
@@ -69,7 +103,8 @@ var userSchema = mongoose.Schema({
     seguidos : [userRedSchema],
     seguidores : [userRedSchema],
     bloqueados: [userRedSchema],
-    notificaciones: [notiSchema]
+    notificaciones: [notiSchema],
+    mensajes:[conversacionSchema]
 });
 
 module.exports = mongoose.model('Usuario', userSchema);
