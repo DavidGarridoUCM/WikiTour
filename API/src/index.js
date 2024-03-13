@@ -10,4 +10,4 @@ mongoose.connect('mongodb://localhost:27017/wikitour').then(() => {
     app.listen(port, () => {
         console.log("Servidor corriendo en http://localhost:" + port);
     })
-}).catch(err => console.log(err));
+}).catch(err => console.log(err.message));

@@ -5,6 +5,6 @@ var UsuarioController = require("../controller/usuario");
 
 var apiR = express.Router();
 
-apiR.get('/prueba', UsuarioController.prueba);
+apiR.post('/', UsuarioController.createUsuario);
 
 module.exports = apiR;
