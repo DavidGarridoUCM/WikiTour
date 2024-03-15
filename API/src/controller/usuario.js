@@ -12,20 +12,37 @@ const createUsuario = async (req, res)=>{
        }     
 }
 
-/*const deleteUsuario = async (req, res)=>{
-       res.status(200).json(usu)
+const deleteUsuario = async (req, res)=>{
+       try{
+              res.status(200).json(usu);
+       }catch(err){
+
+       }
+       
 }
 
 const updateUsuario = async (req, res)=>{
-       res.status(200).json(usu)
+      try{
+              res.status(200).json(usu);
+       }catch(err){
+              
+       }
 }
 
 const getUsuario = async (req, res)=>{
-       res.status(200).json(usu)
+       try{
+              res.status(200).json(usu);
+       }catch(err){
+              
+       }
 }
 
 const getUsuarios = async (req, res)=>{
-       res.status(200).json(usu)
-}*/
+       try{
+              res.status(200).json(usu);
+       }catch(err){
+               
+       }
+}
 
-module.exports = {createUsuario};
+module.exports = {createUsuario, deleteUsuario, updateUsuario, getUsuario, getUsuarios};
