@@ -13,9 +13,8 @@ var userRedSchema = mongoose.Schema({
     },
     nick: {
         type: String,
-        unique: true,
         required: true
-    },
+    }
 });
 
 var notiSchema = mongoose.Schema({
