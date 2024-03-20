@@ -1,6 +1,7 @@
 'use strict'
 var {isEmail} = require('validator');
 var mongoose = require('mongoose');
+var bycript = require('mongoose-bcrypt');
 
 var userRedSchema = mongoose.Schema({
     nombre: {
@@ -90,6 +91,7 @@ var userSchema = mongoose.Schema({
         type: String,
         unique: true,
         required: true, 
+        bcrypt: true
     },
     fotoPerfil: String,
     biografia: String,
@@ -106,6 +108,7 @@ var userSchema = mongoose.Schema({
     mensajes:[conversacionSchema]
 });
 
+userSchema.plugin(bycript);
 module.exports = mongoose.model('Usuario', userSchema);
 
 
