@@ -70,27 +70,27 @@ var conversacionSchema = mongoose.Schema({
 var userSchema = mongoose.Schema({
     nombre: {
         type: String,
-        required: true
+        required: [true, "El nombre es necesario"]
     },
     apellidos: {
         type: String,
-        required: true
+        required: [true, "El apellido es necesario"]
     },
     nick: {
         type: String,
         unique: true,
-        required: true
+        required: [true, "El nombre de usuario es necesario"]
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "El mail es necesario"],
         unique: true,
-        validate: [isEmail, 'Invalid mail']
+        validate: [isEmail, 'Escribe un mail correcto']
     },
     password:{
         type: String,
         unique: true,
-        required: true, 
+        required: [true, "La contraseña es necesaria"],
         bcrypt: true
     },
     fotoPerfil: String,
@@ -107,6 +107,17 @@ var userSchema = mongoose.Schema({
     notificaciones: [notiSchema],
     mensajes:[conversacionSchema]
 });
+
+userSchema.post("save", function (error, doc, next) {
+
+    if (error.keyValue.email != null && error.name === "MongoServerError" && error.code === 11000) {
+      console.log("Ya existe una cuenta con ese mail");
+    } else if (error.keyValue.nick != null && error.name === "MongoServerError" && error.code === 11000) {
+      console.log("Ya existe ese nombre de usuario");
+    } else {
+      console.log("Error");
+    }
+  });
 
 userSchema.plugin(bycript);
 module.exports = mongoose.model('Usuario', userSchema);
