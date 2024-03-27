@@ -1,7 +1,8 @@
 'use strict'
 var {isEmail} = require('validator');
 var mongoose = require('mongoose');
-var bycript = require('mongoose-bcrypt');
+var bcrypt = require('mongoose-bcrypt');
+const { response } = require('express');
 
 var userRedSchema = mongoose.Schema({
     nombre: {
@@ -58,7 +59,10 @@ var mensajeSchema = mongoose.Schema({
 });
 
 var conversacionSchema = mongoose.Schema({
-    usuarioEmisor: userRedSchema,
+    usuarioEmisor: {
+        type: userRedSchema,
+        required: true
+    }, 
     mensajes: [mensajeSchema],
     estado:{
         type: String,
@@ -108,18 +112,7 @@ var userSchema = mongoose.Schema({
     mensajes:[conversacionSchema]
 });
 
-userSchema.post("save", function (error, doc, next) {
-
-    if (error.keyValue.email != null && error.name === "MongoServerError" && error.code === 11000) {
-      console.log("Ya existe una cuenta con ese mail");
-    } else if (error.keyValue.nick != null && error.name === "MongoServerError" && error.code === 11000) {
-      console.log("Ya existe ese nombre de usuario");
-    } else {
-      console.log("Error");
-    }
-  });
-
-userSchema.plugin(bycript);
+userSchema.plugin(bcrypt);
 module.exports = mongoose.model('Usuario', userSchema);
 
 
