@@ -113,6 +113,9 @@ var userSchema = mongoose.Schema({
 });
 
 userSchema.plugin(bcrypt);
-module.exports = mongoose.model('Usuario', userSchema);
+const Usuario = mongoose.model('Usuario', userSchema);
+const UsuRed = mongoose.model('UsuarioRed', userRedSchema);
+const Conver = mongoose.model('Conver', conversacionSchema);
+module.exports = {Usuario:Usuario, UsuRed:UsuRed, Conver: Conver};
 
 

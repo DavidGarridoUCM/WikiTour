@@ -1,6 +1,5 @@
 'use strict'
-
-var Usuario = require('../models/usuario');
+const {Usuario, UsuRed, Conver} = require('../models/usuario');
 var bcrypt = require('bcrypt-nodejs');
  
 async function createUsuario(req, res) {
@@ -95,15 +94,26 @@ async function addMensaje(req, res) {
               //añadir conversacion y añadir el mensaje
               const mens = await Usuario.findOne({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {'mensajes.$': 1});
               if (mens) {
-                     //const up =
                      await Usuario.findOneAndUpdate({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {$push : {'mensajes.$.mensajes' : mensaje}}, {upsert: true}).exec();
+                     res.status(200).send({message: "Updated"});
               }
               else{  
                      const usu = await Usuario.findOne({'nick': nick}).exec();
-                     console.log(usu);
-                    /* Usuario.findOneAndUpdate({'_id': id}, 
-                     {$set : {'mensajes.usuarioEmisor.nombre' : usu.nombre}, 
-                     $set : {'mensajes.usuarioEmisor.apellidos' : usu.apellidos}}, {upsert: true}).exec();*/
+                     //Mirar comprobando si hace falta exportar los schemas para hacer esto(creo que si 
+                     //hace falta), si no hiciera falta Çcrear los objetos asi estaria bien?
+                     var usuRed = new UsuRed({
+                            nombre: usu.nombre,
+                            apellidos: usu.apellidos,
+                            nick: usu.nick
+                     });
+                     var conver = new Conver({
+                            usuarioEmisor: usuRed,
+                            mensajes: mensaje
+                     })
+                     //Ver como pasar el usuario que envia el mensaje a usuarioEmisor
+                     // de la conversacion que se va añadir sin tener que pasar dato por dato
+                     //¿Pasar UsuRedSchema aqui y crearlo, como?
+                     Usuario.findOneAndUpdate({'_id': id}, {$push: {'mensajes': conver}}, {upsert: true}).exec();
               }
               
        }
