@@ -12,6 +12,6 @@ apiR.route("/user").get(UsuarioController.getUsuarios).post(UsuarioController.cr
 
 apiR.post("/login", UsuarioController.loginUsuario);
 
-apiR.post("/msg", UsuarioController.addMensaje);
+apiR.post("/msg/:id", UsuarioController.addMensaje);
 
 module.exports = apiR;

@@ -90,14 +90,18 @@ async function addMensaje(req, res) {
        try {  
               var nick  = req.body.nick;
               var mensaje = req.body.mensaje;
-              const cont = await Usuario.countDocuments({'mensajes.usuarioEmisor.nick': nick});
-
-              if(cont > 0){
-                     await Usuario.findById
+              const { id } = req.params;
+              //Si el usuario que envia el mensaje tiene ya una conversacion añadir mensaje, si no existia 
+              //añadir conversacion y añadir el mensaje
+              const mens = await Usuario.findOne({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {'mensajes.$': 1});
+              if (mens) {
+                     //const up = Usuario.findOneAndUpdate({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {$push : {'mensajes.$.mensajes' : mensaje}}, {upsert: true});
+                     console.log(mens);
               }
               else{
-
+                     res.status(200).send({message: 'no hay'});
               }
+              
        }
        catch (err) {
               console.log(err.message);
