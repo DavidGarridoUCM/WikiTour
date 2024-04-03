@@ -95,11 +95,15 @@ async function addMensaje(req, res) {
               //añadir conversacion y añadir el mensaje
               const mens = await Usuario.findOne({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {'mensajes.$': 1});
               if (mens) {
-                     //const up = Usuario.findOneAndUpdate({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {$push : {'mensajes.$.mensajes' : mensaje}}, {upsert: true});
-                     console.log(mens);
+                     //const up =
+                     await Usuario.findOneAndUpdate({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {$push : {'mensajes.$.mensajes' : mensaje}}, {upsert: true}).exec();
               }
-              else{
-                     res.status(200).send({message: 'no hay'});
+              else{  
+                     const usu = await Usuario.findOne({'nick': nick}).exec();
+                     console.log(usu);
+                    /* Usuario.findOneAndUpdate({'_id': id}, 
+                     {$set : {'mensajes.usuarioEmisor.nombre' : usu.nombre}, 
+                     $set : {'mensajes.usuarioEmisor.apellidos' : usu.apellidos}}, {upsert: true}).exec();*/
               }
               
        }
