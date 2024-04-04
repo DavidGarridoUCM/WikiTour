@@ -90,30 +90,56 @@ async function addMensaje(req, res) {
               var nick  = req.body.nick;
               var mensaje = req.body.mensaje;
               const { id } = req.params;
-              //Si el usuario que envia el mensaje tiene ya una conversacion añadir mensaje, si no existia 
-              //añadir conversacion y añadir el mensaje
-              const mens = await Usuario.findOne({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {'mensajes.$': 1});
+              const mens = await Usuario.findOne({'_id': id, 'conversaciones.usuarioEmisor.nick': nick}, {'conversaciones.$': 1});
               if (mens) {
-                     await Usuario.findOneAndUpdate({'_id': id, 'mensajes.usuarioEmisor.nick': nick}, {$push : {'mensajes.$.mensajes' : mensaje}}, {upsert: true}).exec();
+                     await Usuario.findOneAndUpdate({'_id': id, 'conversaciones.usuarioEmisor.nick': nick}, {$push : {'conversaciones.$.mensajes' : mensaje}}, {upsert: true}).exec();
                      res.status(200).send({message: "Updated"});
               }
               else{  
                      const usu = await Usuario.findOne({'nick': nick}).exec();
-                     //Mirar comprobando si hace falta exportar los schemas para hacer esto(creo que si 
-                     //hace falta), si no hiciera falta Çcrear los objetos asi estaria bien?
                      var usuRed = new UsuRed({
                             nombre: usu.nombre,
                             apellidos: usu.apellidos,
                             nick: usu.nick
                      });
-                     var conver = new Conver({
+                     var conv = new Conver({
                             usuarioEmisor: usuRed,
                             mensajes: mensaje
                      })
-                     //Ver como pasar el usuario que envia el mensaje a usuarioEmisor
-                     // de la conversacion que se va añadir sin tener que pasar dato por dato
-                     //¿Pasar UsuRedSchema aqui y crearlo, como?
-                     Usuario.findOneAndUpdate({'_id': id}, {$push: {'mensajes': conver}}, {upsert: true}).exec();
+                     Usuario.findOneAndUpdate({'_id': id}, {$push: {'conversaciones': conv}}, {upsert: true}).exec();
+                     res.status(200).send({message: "Added"});
+              }
+              
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+//Hacer addSeguidor
+async function addSeguidor(req, res) {
+       try {  
+              var nick  = req.body.nick;
+              var mensaje = req.body.mensaje;
+              const { id } = req.params;
+              const mens = await Usuario.findOne({'_id': id, 'conversaciones.usuarioEmisor.nick': nick}, {'conversaciones.$': 1});
+              if (mens) {
+                     await Usuario.findOneAndUpdate({'_id': id, 'conversaciones.usuarioEmisor.nick': nick}, {$push : {'conversaciones.$.mensajes' : mensaje}}, {upsert: true}).exec();
+                     res.status(200).send({message: "Updated"});
+              }
+              else{  
+                     const usu = await Usuario.findOne({'nick': nick}).exec();
+                     var usuRed = new UsuRed({
+                            nombre: usu.nombre,
+                            apellidos: usu.apellidos,
+                            nick: usu.nick
+                     });
+                     var conv = new Conver({
+                            usuarioEmisor: usuRed,
+                            mensajes: mensaje
+                     })
+                     Usuario.findOneAndUpdate({'_id': id}, {$push: {'conversaciones': conv}}, {upsert: true}).exec();
+                     res.status(200).send({message: "Added"});
               }
               
        }

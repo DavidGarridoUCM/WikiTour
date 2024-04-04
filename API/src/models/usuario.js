@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('mongoose-bcrypt');
 const { response } = require('express');
 
-var userRedSchema = mongoose.Schema({
+const userRedSchema = mongoose.Schema({
     nombre: {
         type: String,
         required: true
@@ -16,10 +16,13 @@ var userRedSchema = mongoose.Schema({
     nick: {
         type: String,
         required: true
-    }
+    }},
+    {
+        autoCreate: false,
+        autoIndex: false
 });
 
-var notiSchema = mongoose.Schema({
+const notiSchema = mongoose.Schema({
     tipo: {
         type: String,
         required: true
@@ -31,10 +34,13 @@ var notiSchema = mongoose.Schema({
     estado: {
         type: String,
         required: true
-    }
+    }},
+    {
+        autoCreate: false,
+        autoIndex: false
 });
 
-var adjuntoSchema = mongoose.Schema({
+const adjuntoSchema = mongoose.Schema({
     tipo: {
         type: String,
         enum: ['ubicacion', 'imagen', 'link'],
@@ -43,10 +49,13 @@ var adjuntoSchema = mongoose.Schema({
     adjunto: {
         type: String,
         required: true
-    }
+    }},
+    {
+        autoCreate: false,
+        autoIndex: false
 });
 
-var mensajeSchema = mongoose.Schema({
+const mensajeSchema = mongoose.Schema({
     texto:{
         type: String,
         required: true
@@ -55,10 +64,13 @@ var mensajeSchema = mongoose.Schema({
     fecha: {
         type: Date, 
         default: Date.now
-    }
+    }},
+    {
+        autoCreate: false,
+        autoIndex: false
 });
 
-var conversacionSchema = mongoose.Schema({
+const conversacionSchema = mongoose.Schema({
     usuarioEmisor: {
         type: userRedSchema,
         required: true
@@ -68,8 +80,11 @@ var conversacionSchema = mongoose.Schema({
         type: String,
         enum: ['leida', 'sin leer'],
         default: 'sin leer'
-    }
-});
+    }},
+    {
+        autoCreate: false,
+        autoIndex: false
+    });
 
 var userSchema = mongoose.Schema({
     nombre: {
@@ -109,13 +124,13 @@ var userSchema = mongoose.Schema({
     seguidores : [userRedSchema],
     bloqueados: [userRedSchema],
     notificaciones: [notiSchema],
-    mensajes:[conversacionSchema]
+    conversaciones:[conversacionSchema]
 });
 
 userSchema.plugin(bcrypt);
 const Usuario = mongoose.model('Usuario', userSchema);
 const UsuRed = mongoose.model('UsuarioRed', userRedSchema);
 const Conver = mongoose.model('Conver', conversacionSchema);
-module.exports = {Usuario:Usuario, UsuRed:UsuRed, Conver: Conver};
+module.exports = {Usuario: Usuario, UsuRed: UsuRed, Conver: Conver};
 
 
