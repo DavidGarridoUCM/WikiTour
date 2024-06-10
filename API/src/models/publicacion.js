@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose');
 
-var userRedPSchema = mongoose.Schema({
+const userRedPSchema = mongoose.Schema({
     nombre: {
         type: String,
         required: true
@@ -18,32 +18,15 @@ var userRedPSchema = mongoose.Schema({
     },
     fotoPerfil: String,
     puntuacion: Number
+},
+{
+    autoCreate: false,
+    autoIndex: false
 });
 
-var cambioSchema = mongoose.Schema({
-    titulo: {
-        type: String,
-        required: true
-    },
-    texto: {
-        type: String,
-        required: true
-    },
-    adjuntos:[adjuntoSchema],
-    usuario:{
-        type: userRedPSchema,
-        required: true
-    },
-    fecha:{
-        type: Date, 
-        default: Date.now
-    }
-});
-
-var adjuntoSchema = mongoose.Schema({
+const adjuntoSchema = mongoose.Schema({
     tipo: {
         type: String,
-        enum: ['ubicacion', 'imagen', 'link'],
         required: true
     },
     adjunto: {
@@ -52,7 +35,30 @@ var adjuntoSchema = mongoose.Schema({
     }
 });
 
-var etapaSchema = mongoose.Schema({
+const cambioSchema = mongoose.Schema({
+    texto: {
+        type: String,
+        required: true
+    },   
+    usuario:{
+        type: userRedPSchema,
+        required: true
+    },
+    adjuntos:[adjuntoSchema],
+    tipo:{
+        type: String,
+        enum: ['original', 'cambio'],
+        default:'original',
+        required: true
+    },
+    fecha:{
+        type: Date, 
+        default: Date.now
+    }
+});
+
+
+const etapaSchema = mongoose.Schema({
     titulo: {
         type: String,
         required: true
@@ -62,16 +68,17 @@ var etapaSchema = mongoose.Schema({
         required: true
     },
     adjuntos:[adjuntoSchema],
-    cambios:[cambioSchema],
+    propuestos:[cambioSchema],
+    aceptados: [cambioSchema],
     tipo:{
         type: String,
-        enum: ['original', 'nueva'],
+        enum: ['original', 'cambio'],
         default:'original',
         required: true
     }
 });
 
-var comentSchema = mongoose.Schema({
+const comentSchema = mongoose.Schema({
     texto: {
         type: String,
         required: true
@@ -79,13 +86,20 @@ var comentSchema = mongoose.Schema({
     likes: Number
 });
 
-var publicacion = mongoose.Schema({
-    usuario: userRedPSchema,
+const publicacion = mongoose.Schema({
+    usuario: {
+        type: userRedPSchema,
+        required: true,
+        unique: true
+    },
     titulo: {
         type: String,
         required: true
     },
-    etapas:[etapaSchema],
+    etapas:[{
+        type: etapaSchema,
+        required: true
+    }],
     fecha:{
         type: Date, 
         default: Date.now
@@ -105,6 +119,11 @@ var publicacion = mongoose.Schema({
         type: String,
         required: true
     }
+},
+{
+collection: "publicaciones"
 });
 
-module.exports = mongoose.model('Publicacion', publicacion);
+const Publicacion  = mongoose.model('Publicacion', publicacion);
+const UsuPRed = mongoose.model('UsuPRed', userRedPSchema);
+module.exports = {Publicacion: Publicacion, UsuPRed: UsuPRed};

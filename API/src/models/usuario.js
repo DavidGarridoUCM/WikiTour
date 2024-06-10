@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('mongoose-bcrypt');
 const { response } = require('express');
 
+//meter foto de perfil aqui y en los usos en el controller, etc
 const userRedSchema = mongoose.Schema({
     nombre: {
         type: String,
@@ -25,6 +26,7 @@ const userRedSchema = mongoose.Schema({
 const notiSchema = mongoose.Schema({
     tipo: {
         type: String,
+        enum: ['follow', 'mensaje', 'like', 'coment'],
         required: true
     },
     usuario: {
@@ -64,6 +66,11 @@ const mensajeSchema = mongoose.Schema({
     fecha: {
         type: Date, 
         default: Date.now
+    },
+    tipo: {
+        type: String,
+        enum: ["recibido", "enviado"],
+        default: "recibido"
     }},
     {
         autoCreate: false,
@@ -86,7 +93,7 @@ const conversacionSchema = mongoose.Schema({
         autoIndex: false
     });
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
     nombre: {
         type: String,
         required: [true, "El nombre es necesario"]
@@ -125,12 +132,16 @@ var userSchema = mongoose.Schema({
     bloqueados: [userRedSchema],
     notificaciones: [notiSchema],
     conversaciones:[conversacionSchema]
+},
+{
+collection: "usuarios"
 });
 
 userSchema.plugin(bcrypt);
 const Usuario = mongoose.model('Usuario', userSchema);
-const UsuRed = mongoose.model('UsuarioRed', userRedSchema);
+const UsuRed = mongoose.model('UsuRed', userRedSchema);
 const Conver = mongoose.model('Conver', conversacionSchema);
-module.exports = {Usuario: Usuario, UsuRed: UsuRed, Conver: Conver};
+const Noti = mongoose.model('Noti', notiSchema);
+module.exports = {Usuario: Usuario, UsuRed: UsuRed, Conver: Conver, Noti: Noti};
 
 

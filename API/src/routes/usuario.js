@@ -12,6 +12,10 @@ apiR.route("/user").get(UsuarioController.getUsuarios).post(UsuarioController.cr
 
 apiR.post("/login", UsuarioController.loginUsuario);
 
-apiR.post("/msg/:id", UsuarioController.addMensaje);
+apiR.put("/msg/:id", UsuarioController.addMensaje);
+
+apiR.put("/fol/:id", UsuarioController.addSeguidor);
+
+apiR.put("/fll/:id", UsuarioController.addSeguidor);
 
 module.exports = apiR;
