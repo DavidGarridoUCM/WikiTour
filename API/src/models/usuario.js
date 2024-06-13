@@ -115,7 +115,6 @@ const userSchema = mongoose.Schema({
     },
     password:{
         type: String,
-        unique: true,
         required: [true, "La contraseña es necesaria"],
         bcrypt: true
     },

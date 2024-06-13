@@ -1,0 +1,14 @@
+<div class="col-lg-6 mx-auto reg">
+    <h1>INICIAR SESION</h1>
+    <form [formGroup]="formLog" (ngSubmit)="onSubmit()">
+        <div class="mb-2">
+            <label for="nick">Username</label>
+            <input type="text" id="nick" class="form-control" formControlName="nick">
+        </div>
+        <div class="mb-2">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" class="form-control" formControlName="password">
+        </div>
+        <input type="submit" value="Iniciar sesion" class="btn btn-primary">
+    </form>
+</div>

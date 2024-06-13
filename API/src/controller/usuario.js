@@ -1,6 +1,7 @@
 'use strict'
 const {Usuario, UsuRed, Conver, Noti} = require('../models/usuario');
 var bcrypt = require('bcrypt-nodejs');
+const jwt = require('../../services/jwt');
  
 async function createUsuario(req, res) {
        try {  
@@ -80,18 +81,27 @@ async function getUsuarios(req, res, tipo) {
 async function loginUsuario(req, res) {
        try {  
               var nick  = req.body.nick;
-              var email = req.body.email;
-              const usu = await Usuario.findOne({'nick': nick, 'email': email});
+              //var email = req.body.email;
+              const usu = await Usuario.findOne({'nick': nick});
               if(usu){
                      bcrypt.compare(req.body.password, usu.password, function(err, ok){
                             if(err){
                                    console.log(err.message);
                             }
                             if(ok){
-                                   res.status(200).send({message: "Match"});
+                                   if(req.body.gettoken){
+                                          return res.status(200).send({
+                                                 token : jwt.createToken(usu)
+                                          })
+                                   }
+                                   else{
+                                         usu.password = undefined;
+                                         return res.status(200).send(usu);    
+                                   }
+                                   
                             }
                             else{
-                                   res.status(200).send({message: "Not Match"});
+                                   return res.status(200).send({message: "Not Match"});
                             }
                      })
               }
