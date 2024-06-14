@@ -16,6 +16,7 @@ export class LoginComponent{
   public token : any;
   public status : any;
   
+  
 
     constructor(){
       this.formLog = new FormGroup({
@@ -35,6 +36,7 @@ export class LoginComponent{
             else {
               this.status = 'succes';
               //Meter los datos del usuario al localStorage
+              localStorage.setItem('Identity', JSON.stringify(this.identity));
               //GetToken
               this.getToken();
             }
@@ -64,6 +66,7 @@ export class LoginComponent{
             else {
               this.status = 'succes';
               //Meter el token al localStorage
+              localStorage.setItem('token', JSON.stringify(this.token));
             }
           },
           error: error => {
