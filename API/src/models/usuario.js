@@ -123,9 +123,11 @@ const userSchema = mongoose.Schema({
     puntuacion: Number,
     rol: {
         type: String,
-        enum: ['user', 'admin', 'moderator'],
+        enum: ['user', 'admin'],
         default:'user'
     },
+    numSeguidores: Number, 
+    numSeguidos: Number, 
     seguidos : [userRedSchema],
     seguidores : [userRedSchema],
     bloqueados: [userRedSchema],

@@ -10,9 +10,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './login.component.scss'
 })
 export class LoginComponent{
-  usersService = inject(UsersService);
-  formLog : FormGroup;
-  //gettoken : boolean;
+  private usersService = inject(UsersService);
+  public formLog : FormGroup;
+  public identity: any;
+  public token : any;
+  public status : any;
+  
 
     constructor(){
       this.formLog = new FormGroup({
@@ -21,10 +24,58 @@ export class LoginComponent{
       })
     }
 
-    async onSubmit() {
+    onSubmit() {
+      this.usersService.login(this.formLog.value).subscribe(
+        { next: response => {
+            this.identity = response;
+            console.log(this.identity);
+            if (!this.identity || !this.identity._id) {
+              this.status = 'error';
+            }
+            else {
+              this.status = 'succes';
+              //Meter los datos del usuario al localStorage
+              //GetToken
+              this.getToken();
+            }
+          },
+          error: error => {
+            var errorMessage = <any>error;
+            console.log(errorMessage);
+
+            if (errorMessage != null) {
+              this.status = 'error';
+            }
+          }
+        } 
+      );
+      
+    }
+
+    private getToken(){
       this.formLog.addControl('gettoken', new FormControl<boolean>(true));
-      const response = await this.usersService.login(this.formLog.value);
-      console.log(response);
+      this.usersService.login(this.formLog.value).subscribe(
+        { next: response => {
+            this.token = response;
+            console.log(this.token);
+            if (!this.token) {
+              this.status = 'error';
+            }
+            else {
+              this.status = 'succes';
+              //Meter el token al localStorage
+            }
+          },
+          error: error => {
+            var errorMessage = <any>error;
+            console.log(errorMessage);
+
+            if (errorMessage != null) {
+              this.status = 'error';
+            }
+          }
+        } 
+      );
     }
 
 }

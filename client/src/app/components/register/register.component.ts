@@ -28,7 +28,8 @@ export class RegisterComponent{
     }
 
     async onSubmit() {
-      await this.usersService.registro(this.formReg.value);
+     const response = await this.usersService.registro(this.formReg.value);
+     console.log(response);
     }
 
 }

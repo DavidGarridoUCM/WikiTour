@@ -81,8 +81,10 @@ async function getUsuarios(req, res, tipo) {
 async function loginUsuario(req, res) {
        try {  
               var nick  = req.body.nick;
-              //var email = req.body.email;
-              const usu = await Usuario.findOne({'nick': nick});
+              
+              const usu = await Usuario.findOne({'nick': nick}, {'_id': 1, 'nombre': 1, 
+                     'apellidos': 1, 'password' : 1, 'nick': 1, 'fotoPerfil': 1, 
+                     'rol': 1, 'numSeguidores': 1, 'numSeguidos': 1});
               if(usu){
                      bcrypt.compare(req.body.password, usu.password, function(err, ok){
                             if(err){
