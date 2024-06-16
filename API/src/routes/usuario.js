@@ -10,12 +10,12 @@ put(UsuarioController.updateUsuario).delete(UsuarioController.deleteUsuario);
 
 apiR.route("/user").get(UsuarioController.getUsuarios).post(UsuarioController.createUsuario);
 
-apiR.post("/login", UsuarioController.loginUsuario);
+apiR.post("/user/login", UsuarioController.loginUsuario);
 
-apiR.put("/msg/:id", UsuarioController.addMensaje);
+apiR.put("user/msg/:id", UsuarioController.addMensaje);
 
-apiR.put("/fol/:id", UsuarioController.addSeguidor);
+apiR.put("user/fol/:id", UsuarioController.addSeguidor);
 
-apiR.put("/fll/:id", UsuarioController.addSeguidor);
+apiR.put("user/fll/:id", UsuarioController.addSeguidor);
 
 module.exports = apiR;

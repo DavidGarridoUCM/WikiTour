@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class LoginComponent{
   private usersService = inject(UsersService);
   public formLog : FormGroup;
-  public identity: any;
-  public token : any;
-  public status : any;
-  
-  
+  private router: Router = new Router;
 
     constructor(){
       this.formLog = new FormGroup({
@@ -27,58 +24,26 @@ export class LoginComponent{
 
     onSubmit() {
       this.usersService.login(this.formLog.value).subscribe(
-        { next: response => {
-            this.identity = response;
-            console.log(this.identity);
-            if (!this.identity || !this.identity._id) {
-              this.status = 'error';
-            }
-            else {
-              this.status = 'succes';
-              //Meter los datos del usuario al localStorage
-              localStorage.setItem('Identity', JSON.stringify(this.identity));
-              //GetToken
-              this.getToken();
-            }
-          },
-          error: error => {
-            var errorMessage = <any>error;
-            console.log(errorMessage);
-
-            if (errorMessage != null) {
-              this.status = 'error';
-            }
-          }
-        } 
+        {next: () => {
+          this.logtoken();
+        },
+        error: (err) => {
+          console.log(err.errorMessage);
+        }
+      }
       );
-      
     }
 
-    private getToken(){
+    logtoken(){
       this.formLog.addControl('gettoken', new FormControl<boolean>(true));
-      this.usersService.login(this.formLog.value).subscribe(
-        { next: response => {
-            this.token = response.token;
-            console.log(this.token);
-            if (!this.token) {
-              this.status = 'error';
-            }
-            else {
-              this.status = 'succes';
-              //Meter el token al localStorage
-              localStorage.setItem('token', this.token);
-            }
-          },
-          error: error => {
-            var errorMessage = <any>error;
-            console.log(errorMessage);
-
-            if (errorMessage != null) {
-              this.status = 'error';
-            }
-          }
-        } 
-      );
+      this.usersService.loginToken(this.formLog.value).subscribe(
+      {next: () => {
+          //this.router.navigate(['']); //Cuando haga el home que lleve a home o a timeline
+        },
+      error: (err) => {
+        console.log(err.errorMessage);
+        }
+      });
     }
 
 }

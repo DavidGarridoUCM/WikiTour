@@ -27,6 +27,12 @@
           <li class="nav-item d-lg-none">
             <a class="nav-link" href="#"><i class="bi bi-envelope"></i>MENSAJES</a>
           </li>
+          <li class="nav-item d-none d-lg-block">
+            <a class="nav-link" role="button" (click)="logout()" title="LOGOUT"><i class="bi bi-envelope"></i></a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link" role="button" (click)="logout()"><i class="bi bi-envelope"></i>LOGOUT</a>
+          </li>
         </ul>
         <form class="d-flex" role="search">
             <input class="form-control me-2" type="search" placeholder="Usuarios" aria-label="Search">
@@ -36,16 +42,16 @@
         @else{
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item d-none d-lg-block">
-              <a class="nav-link" href="#" title="LOGIN"><i class="bi bi-airplane"></i></a>
+              <a class="nav-link" routerLink="/login" title="LOGIN"><i class="bi bi-airplane"></i></a>
             </li>
             <li class="nav-item d-lg-none">
-              <a class="nav-link" href="#"><i class="bi bi-airplane"></i>LOGIN</a>
+              <a class="nav-link" routerLink="/login"><i class="bi bi-airplane"></i>LOGIN</a>
             </li>
             <li class="nav-item d-none d-lg-block">
-              <a class="nav-link" href="#" title="REGISTER"><i class="bi bi-person-fill"></i></a>
+              <a class="nav-link" routerLink="/register" title="REGISTER"><i class="bi bi-person-fill"></i></a>
             </li>
             <li class="nav-item d-lg-none">
-              <a class="nav-link" href="#"><i class="bi bi-person-fill"></i>REGISTER</a>
+              <a class="nav-link" routerLink="/register"><i class="bi bi-person-fill"></i>REGISTER</a>
             </li>
           </ul>
         }

@@ -127,7 +127,8 @@ const userSchema = mongoose.Schema({
         default:'user'
     },
     numSeguidores: Number, 
-    numSeguidos: Number, 
+    numSeguidos: Number,
+    publicaciones: Number,
     seguidos : [userRedSchema],
     seguidores : [userRedSchema],
     bloqueados: [userRedSchema],

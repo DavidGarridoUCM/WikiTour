@@ -1,10 +1,11 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -19,5 +20,9 @@ export class HeaderComponent implements OnInit, DoCheck{
     }
     ngDoCheck(): void {
       this.token = this.userService.getToken();
+    }
+
+    logout(){
+      this.userService.logout();
     }
 }
