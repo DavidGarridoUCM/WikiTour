@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, DoCheck, OnInit } from '@angular/core';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-header',
@@ -7,6 +8,16 @@ import { Component } from '@angular/core';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, DoCheck{
+    
     public nombre = "WIKITOUR";
+    token: any;
+    userService: UsersService = new UsersService;
+
+    ngOnInit(): void {
+      this.token = this.userService.getToken();
+    }
+    ngDoCheck(): void {
+      this.token = this.userService.getToken();
+    }
 }

@@ -5,7 +5,9 @@
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+     
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" > 
+        @if(token){
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item d-none d-lg-block">
             <a class="nav-link" href="#" title="TOURS"><i class="bi bi-airplane"></i></a>
@@ -30,6 +32,23 @@
             <input class="form-control me-2" type="search" placeholder="Usuarios" aria-label="Search">
             <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
           </form>
+        }
+        @else{
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item d-none d-lg-block">
+              <a class="nav-link" href="#" title="LOGIN"><i class="bi bi-airplane"></i></a>
+            </li>
+            <li class="nav-item d-lg-none">
+              <a class="nav-link" href="#"><i class="bi bi-airplane"></i>LOGIN</a>
+            </li>
+            <li class="nav-item d-none d-lg-block">
+              <a class="nav-link" href="#" title="REGISTER"><i class="bi bi-person-fill"></i></a>
+            </li>
+            <li class="nav-item d-lg-none">
+              <a class="nav-link" href="#"><i class="bi bi-person-fill"></i>REGISTER</a>
+            </li>
+          </ul>
+        }
       </div>
     </div>
   </nav>

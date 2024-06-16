@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -9,7 +10,8 @@ export class UsersService {
 
   private httpClient = inject(HttpClient);
   private urlBase : string; 
-  constructor() {
+  public token: any;
+  constructor(private router: Router) {
     this.urlBase = "http://localhost:3800/user"
    }
 
@@ -21,6 +23,28 @@ export class UsersService {
 
   login(formVal: any): Observable<any>{
     return this.httpClient.post<any>("http://localhost:3800/login", formVal);
+  }
+
+  logout(){
+    localStorage.removeItem('identity');
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
+  //getIdentity(){
+    
+  //}
+
+  getToken(){
+    let tok = localStorage.getItem("token");
+    if(tok != undefined){
+      this.token = tok;
+    }
+    else{
+      this.token = null;
+    }
+
+    return this.token;
   }
 
   //private setToken()

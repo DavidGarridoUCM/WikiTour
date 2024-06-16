@@ -58,7 +58,7 @@ export class LoginComponent{
       this.formLog.addControl('gettoken', new FormControl<boolean>(true));
       this.usersService.login(this.formLog.value).subscribe(
         { next: response => {
-            this.token = response;
+            this.token = response.token;
             console.log(this.token);
             if (!this.token) {
               this.status = 'error';
@@ -66,7 +66,7 @@ export class LoginComponent{
             else {
               this.status = 'succes';
               //Meter el token al localStorage
-              localStorage.setItem('token', JSON.stringify(this.token));
+              localStorage.setItem('token', this.token);
             }
           },
           error: error => {

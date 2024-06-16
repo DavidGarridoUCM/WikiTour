@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 
@@ -9,6 +9,9 @@ import { HeaderComponent } from './components/header/header.component';
     styleUrl: './app.component.scss',
     imports: [RouterOutlet, HeaderComponent, RouterLink, RouterLinkActive]
 })
-export class AppComponent {
+export class AppComponent{
+  
   title = 'client';
+  
+
 }
