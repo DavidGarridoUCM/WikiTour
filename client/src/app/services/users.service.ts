@@ -33,7 +33,6 @@ export class UsersService {
             else {
               //Meter los datos del usuario al localStorage
               localStorage.setItem('Identity', JSON.stringify(this.identity));
-              console.log(JSON.stringify(formVal));
             }
           },
           error: error => {
@@ -93,19 +92,28 @@ export class UsersService {
     return this.identity;
   }
 
+  isLogged(){
+    const tok = this.getToken();
+    if(tok == null){
+      return false;
+    }
+      const payload = JSON.parse(atob(tok.split('.')[1]));
+      const exp = payload.exp * 1000;
+      return Date.now() < exp;
+  }
+
   getToken(){
     if(typeof window !== 'undefined'){
       let tok = localStorage.getItem("token");
       if(tok != undefined){
-        this.token = tok;
+        return tok;
       }
       else{
-        this.token = null;
+        return null;
       }
     }
     else{
-      this.token =  null;
+      return null;
     }
-    return this.token;
   }
 }

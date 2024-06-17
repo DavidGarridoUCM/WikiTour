@@ -8,7 +8,9 @@ var apiR = express.Router();
 apiR.route("/user/:id").get(UsuarioController.getUsuario).
 put(UsuarioController.updateUsuario).delete(UsuarioController.deleteUsuario);
 
-apiR.route("/user").get(UsuarioController.getUsuarios).post(UsuarioController.createUsuario);
+apiR.route("/user/:id").get(UsuarioController.getUsuarios);
+
+apiR.route("/user").post(UsuarioController.createUsuario);
 
 apiR.post("/user/login", UsuarioController.loginUsuario);
 

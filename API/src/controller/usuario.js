@@ -52,18 +52,18 @@ async function getUsuario(req, res) {
        }
 }
 
-async function getUsuarios(req, res, tipo) {
+async function getUsuarios(req, res) {
        try {
               var usuarios;
-              if(tipo = 'seguidos'){
+              if(res.tipo = 'seguidos'){
                      const { id } = req.params;
                      usuarios = await Usuario.find({'_id': id}, {'seguidos': 1, '_id': 0});
               }
-              else if(tipo == "seguidores"){
+              else if(res.tipo == "seguidores"){
                      const { id } = req.params;
                      usuarios = await Usuario.find({'_id': id}, {'seguidores': 1, '_id': 0});
               }
-              else if(tipo == "bloqueados"){
+              else if(res.tipo == "bloqueados"){
                      const { id } = req.params;
                      usuarios = await Usuario.find({'_id': id}, {'bloqueados': 1, '_id': 0});
               }
@@ -82,7 +82,7 @@ async function loginUsuario(req, res) {
        try {  
               var nick  = req.body.nick;
               
-              const usu = await Usuario.findOne({'nick': nick}, {'_id': 1, 'nombre': 1, 
+              const usu = await Usuario.findOne({'nick': nick}, {'_id': 1, 'nombre': 1, 'email':1,
                      'apellidos': 1, 'password' : 1, 'nick': 1, 'fotoPerfil': 1, 
                      'rol': 1});
               if(usu){
