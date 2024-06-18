@@ -24,5 +24,6 @@ export class HeaderComponent implements OnInit, DoCheck{
 
     logout(){
       this.userService.logout();
+      //Redirigir al login
     }
 }

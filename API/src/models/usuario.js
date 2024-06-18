@@ -126,9 +126,18 @@ const userSchema = mongoose.Schema({
         enum: ['user', 'admin'],
         default:'user'
     },
-    numSeguidores: Number, 
-    numSeguidos: Number,
-    publicaciones: Number,
+    numSeguidores: {
+        type : Number,
+        default : 0
+    }, 
+    numSeguidos: {
+        type : Number,
+        default : 0
+    },
+    publicaciones: {
+        type : Number,
+        default : 0
+    },
     seguidos : [userRedSchema],
     seguidores : [userRedSchema],
     bloqueados: [userRedSchema],

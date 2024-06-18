@@ -44,7 +44,8 @@ async function updateUsuario(req, res) {
 async function getUsuario(req, res) {
        try {
               const { id } = req.params;
-              const usu = await Usuario.findById(id);
+              const usu = await Usuario.findOne({'_id': id}, {'_id': 1, 'nombre': 1,
+              'apellidos': 1, 'nick': 1, 'fotoPerfil': 1, 'numSeguidores' : 1, 'numSeguidos' : 1, 'publicaciones' : 1});
               res.status(200).json(usu);
        }
        catch (err) {

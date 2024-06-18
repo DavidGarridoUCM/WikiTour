@@ -9,20 +9,20 @@
                   alt="Generic placeholder image" class="img-fluid" style="width: 180px; border-radius: 10px;">
               </div>
               <div class="flex-grow-1 ms-3">
-                <h5 class="mb-1">Danny McLoan</h5>
-                <p class="mb-2 pb-1">Senior Journalist</p>
-                <div class="d-flex justify-content-start rounded-3 p-2 mb-2 bg-body-tertiary">
+                <h5 class="mb-1">{{user.nombre + ' ' + user.apellidos}}</h5>
+                <p class="mb-2 pb-1">{{user.biografia}}</p>
+                <div class="d-flex justify-content-start rounded-4 p-2 mb-2 bg-body-tertiary">
                   <div>
-                    <p class="small text-muted mb-1">Articles</p>
-                    <p class="mb-0">41</p>
+                    <p class="small text-muted mb-1">Publicaciones</p>
+                    <p class="mb-0">{{user.publicaciones}}</p>
                   </div>
                   <div class="px-3">
-                    <p class="small text-muted mb-1">Followers</p>
-                    <p class="mb-0">976</p>
+                    <p class="small text-muted mb-1">Seguidores</p>
+                    <p class="mb-0">{{user.numSeguidores}}</p>
                   </div>
                   <div>
-                    <p class="small text-muted mb-1">Rating</p>
-                    <p class="mb-0">8.5</p>
+                    <p class="small text-muted mb-1">Puntuacion</p>
+                    <p class="mb-0">{{user.puntuacion}}</p>
                   </div>
                 </div>
                 <div class="d-flex pt-1">

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, firstValueFrom, tap } from 'rxjs';
+import { user } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class UsersService {
   private urlBase : string; 
   public identity: any;
   public token: any;
+  public user : user | undefined
   constructor() {
     this.urlBase = "http://localhost:3800/user"
    }
@@ -115,5 +117,9 @@ export class UsersService {
     else{
       return null;
     }
+  }
+
+  getUser(id: any) : Observable<any>{
+    return this.httpClient.get<any>(this.urlBase + '/' + id);
   }
 }
