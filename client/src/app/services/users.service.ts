@@ -122,4 +122,9 @@ export class UsersService {
   getUser(id: any) : Observable<any>{
     return this.httpClient.get<any>(this.urlBase + '/' + id);
   }
+
+  follow(idSeguidor: any, idSeguido: any)  : Observable<any> {
+    const body = {"idSeguidor": idSeguidor, "idSeguido" : idSeguido};
+    return this.httpClient.post<any>(this.urlBase + '/foll', body);
+  }
 }

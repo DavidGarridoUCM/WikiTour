@@ -1,6 +1,6 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit, DoCheck{
     
     public nombre = "WIKITOUR";
     token: any;
+    private router: Router = new Router;
     userService: UsersService = new UsersService;
 
     ngOnInit(): void {
@@ -24,6 +25,6 @@ export class HeaderComponent implements OnInit, DoCheck{
 
     logout(){
       this.userService.logout();
-      //Redirigir al login
+      this.router.navigate(['/login']);
     }
 }

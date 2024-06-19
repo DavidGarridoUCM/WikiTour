@@ -138,9 +138,8 @@ const userSchema = mongoose.Schema({
         type : Number,
         default : 0
     },
-    seguidos : [userRedSchema],
-    seguidores : [userRedSchema],
-    bloqueados: [userRedSchema],
+    seguidos : [mongoose.Schema.ObjectId],
+    seguidores : [mongoose.Schema.ObjectId],
     notificaciones: [notiSchema],
     conversaciones:[conversacionSchema]
 },

@@ -17,14 +17,18 @@ export class PerfilComponent implements OnInit{
     private router: Router = new Router;
     private route = inject(ActivatedRoute);
     public user: user = new user('', '', '', '', '', '', '', 0, '', 0, 0, 0);
+    private id: any;
 
     
     
     
     ngOnInit(): void {
-      const id = this.route.snapshot.params['id'];
-      //console.log('ID:' + id);
-      this.getUser(id);
+      this.loadPage();
+    }
+
+    loadPage(){
+      this.id = this.route.snapshot.params['id'];
+      this.getUser(this.id);
     }
     
 
@@ -37,6 +41,16 @@ export class PerfilComponent implements OnInit{
         }
       );
 
+    }
+
+    follow(){
+      this.usersService.follow(this.usersService.getIdentity()._id, this.id).subscribe(
+        {next: () => {
+          this.loadPage();
+        },
+        error: (e) => console.error(e.errorMessage)
+        }
+      );
     }
 
 

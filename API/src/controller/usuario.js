@@ -2,6 +2,7 @@
 const {Usuario, UsuRed, Conver, Noti} = require('../models/usuario');
 var bcrypt = require('bcrypt-nodejs');
 const jwt = require('../../services/jwt');
+const { default: mongoose } = require('mongoose');
  
 async function createUsuario(req, res) {
        try {  
@@ -149,23 +150,10 @@ async function addMensaje(req, res) {
 
 async function addSeguidor(req, res) {
        try {  
-              var nick  = req.body.nick;
-              const { id } = req.params;
-              const usu = await Usuario.findOne({'nick': nick});
-              if (usu) {
-                     var usuRed = new UsuRed({
-                            nombre: usu.nombre,
-                            apellidos: usu.apellidos,
-                            nick: usu.nick
-                     });
-                     await Usuario.findOneAndUpdate({'_id': id}, {$push : {'seguidores' : usuRed}}, {upsert: true}).exec();
-                     res.status(200).send({message: "Seguidor añadido"});
-              }
-              else{
-                     //Poner error
-                     res.status(200).send({message: "Added"});
-              }
-              
+              var idSeguidor  = req.body.idSeguidor;
+              var idSeguido = req.body.idSeguido;
+              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$push : {'seguidores' : idSeguidor}, $inc: {'numSeguidores': 1}}, {returnNewDocument: true}).exec();
+              res.status(200).send({message: "Seguidor añadido"});
        }
        catch (err) {
               console.log(err.message);
@@ -174,9 +162,9 @@ async function addSeguidor(req, res) {
 
 async function deleteSeguidor(req, res) {
        try {  
-              var idFoll  = req.body.idFoll;
-              const { id } = req.params;
-              await Usuario.findOneAndUpdate({'_id': id}, {$pull : {'seguidos._id' : idFoll}}, {upsert: true}).exec();
+              var idSeguidor  = req.body.idSeguidor;
+              var idSeguido = req.body.idSeguido;
+              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$pull : {'seguidos._id' : idSeguidor}, $inc: {'numSeguidores': -1}}, {upsert: true}).exec();
               res.status(200).send({message: "Seguidor eliminado"});
        }
        catch (err) {
@@ -187,21 +175,15 @@ async function deleteSeguidor(req, res) {
 
 async function addSeguido(req, res) {
        try {  
-              var nick  = req.body.nick;
-              const { id } = req.params;
-              const usu = await Usuario.findOne({'nick': nick});
-              if (usu) {
-                     var usuRed = new UsuRed({
-                            nombre: usu.nombre,
-                            apellidos: usu.apellidos,
-                            nick: usu.nick
-                     });
-                     await Usuario.findOneAndUpdate({'_id': id}, {$push : {'seguidos' : usuRed}}, {upsert: true}).exec();
+              try {  
+                     var idSeguidor  = req.body.idSeguidor;
+                     var idSeguido = req.body.idSeguido;
+                     var idSeg = mongoose.Types.ObjectId(idSeguido);
+                     await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$push : {'seguido' : idSeg}, $inc: {'numSeguidos': 1}}, {upsert: true}).exec();
                      res.status(200).send({message: "Seguido añadido"});
               }
-              else{
-                     //Poner error
-                     res.status(200).send({message: "Added"});
+              catch (err) {
+                     console.log(err.message);
               }
               
        }
@@ -212,48 +194,10 @@ async function addSeguido(req, res) {
 
 async function deleteSeguido(req, res) {
        try {  
-              var idSeg  = req.body.idSeg;
-              const { id } = req.params;
-              await Usuario.findOneAndUpdate({'_id': id}, {$pull : {'seguidos._id' : idSeg}}, {upsert: true}).exec();
-              res.status(200).send({message: "Seguido eliminado"});
-       }
-       catch (err) {
-              //Poner error
-              res.status(200).send({message: "Added"});
-       }
-}
-
-async function addBloqueado(req, res) {
-       try {  
-              var nick  = req.body.nick;
-              const { id } = req.params;
-              const usu = await Usuario.findOne({'nick': nick});
-              if (usu) {
-                     var usuRed = new UsuRed({
-                            nombre: usu.nombre,
-                            apellidos: usu.apellidos,
-                            nick: usu.nick
-                     });
-                     await Usuario.findOneAndUpdate({'_id': id}, {$push : {'bloqueados' : usuRed}}, {upsert: true}).exec();
-                     res.status(200).send({message: "Bloqueado añadido"});
-              }
-              else{
-                     //Poner error
-                     res.status(200).send({message: "Added"});
-              }
-              
-       }
-       catch (err) {
-              console.log(err.message);
-       }
-}
-
-async function deleteBloqueado(req, res) {
-       try {  
-              var idBloq  = req.body.idBloq;
-              const { id } = req.params;
-              await Usuario.findOneAndUpdate({'_id': id}, {$pull : {'bloqueados._id' : idBloq}}, {upsert: true}).exec();
-              res.status(200).send({message: "Seguidor añadido"});
+              var idSeguidor  = req.body.idSeguidor;
+                     var idSeguido = req.body.idSeguido;
+                     await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$pull : {'seguido' : idSeguido}, $inc: {'numSeguidos': -1}}, {upsert: true}).exec();
+                     res.status(200).send({message: "Seguido eliminado"});
        }
        catch (err) {
               //Poner error
@@ -297,5 +241,5 @@ async function addNoti(req, res) {
 }
 
 module.exports = {createUsuario, deleteUsuario, updateUsuario, getUsuario, getUsuarios, 
-       loginUsuario, addMensaje, addSeguidor, addSeguido, addBloqueado, addNoti, 
-       deleteBloqueado, deleteSeguido, deleteSeguidor};
+       loginUsuario, addMensaje, addSeguidor, addSeguido, addNoti, 
+        deleteSeguido, deleteSeguidor};
