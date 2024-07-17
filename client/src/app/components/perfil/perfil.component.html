@@ -25,10 +25,31 @@
                     <p class="mb-0">{{user.puntuacion}}</p>
                   </div>
                 </div>
-                <div class="d-flex pt-1">
+                
+                @if(!miPerfil()){
+                  <div class="d-flex pt-1">
                   <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary me-1 flex-grow-1">Chat</button>
-                  <button  type="button" (click)='follow()' data-mdb-button-init data-mdb-ripple-init class="btn btn-primary flex-grow-1">Follow</button>
-                </div>
+                  @if(isFollow == true){
+                    <button  type="button" (click)='unfollow()' data-mdb-button-init data-mdb-ripple-init class="btn btn-primary flex-grow-1">Unfollow</button>
+                  }
+                  @else{
+                    <button  type="button" (click)='follow()' data-mdb-button-init data-mdb-ripple-init class="btn btn-primary flex-grow-1">Follow</button>
+                  }
+                  </div>
+                }
+                @else{
+                  <div class="d-flex justify-content-start rounded-4 p-2 mb-2 bg-body-tertiary">
+                  <div>
+                    <p class="small text-muted mb-1">Correo Electronico</p>
+                    <p class="mb-0">{{user.email}}</p>
+                  </div>
+                  <div class="px-3">
+                    <p class="small text-muted mb-1">Nombre Usuario</p>
+                    <p class="mb-0">{{user.nick}}</p>
+                  </div>
+                  <a class="navlink" routerLink="/perfilData"><p>Cambiar datos</p></a>
+                  </div>
+                  }  
               </div>
             </div>
           </div>

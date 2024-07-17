@@ -68,9 +68,9 @@ async function deleteComment(req, res) {
 async function addComment(req, res) {
        try {  
               const {id} = req.params;
-              var comment = req.body.comment;
+              var comment = req.body;
               const publi = await Publicacion.updateOne({'_id': id}, {$push : {'comentarios': comment}});
-              res.status(200).json(publi.likes);
+              res.status(200).json(publi);
        }
        catch (err) {
               console.log(err.message);
@@ -79,8 +79,9 @@ async function addComment(req, res) {
 //Quitar like
 async function deleteLike(req, res) {
        try {  
-              var id = req.body.id;
-              const publi = await Publicacion.updateOne({'_id': id}, {$inc : {'likes': -1}});
+              const {id} = req.params;
+              const userId = req.body.userId;
+              const publi = await Publicacion.updateOne({'_id': id}, {$inc : {'numlikes': -1}, $pull: {'likes': userId}});
               res.status(200).json(publi.likes);
        }
        catch (err) {
@@ -90,8 +91,9 @@ async function deleteLike(req, res) {
 //Sumar like
 async function addLike(req, res) {
        try {  
-              var id = req.body.id;
-              const publi = await Publicacion.updateOne({'_id': id}, {$inc : {'likes': 1}});
+              const {id} = req.params;
+              const userId = req.body.userId;
+              const publi = await Publicacion.updateOne({'_id': id}, {$inc : {'numlikes': 1}, $push: {'likes': userId}});
               res.status(200).json(publi.likes);
        }
        catch (err) {
@@ -101,9 +103,10 @@ async function addLike(req, res) {
 
 
 async function createPubli(req, res) {
-    try {  
+    try { 
            const publi = await Publicacion.create(req.body);
-           res.status(200).json(publi);
+           //console.log(req.body);
+           res.status(200).send(publi);
     }
     catch (err) {
            res.status(500).send(err.message);
@@ -125,7 +128,7 @@ async function deletePubli(req, res) {
 async function updatePubli(req, res) {
     try {
            const { id } = req.params;
-           const publi = await Publicacion.findByIdAndUpdate(id, req.body);
+           const publi = await Publicacion.updateOne({'_id': id}, {'etapas': req.body});
            res.status(200).json(publi);
     }
     catch (err) {
@@ -146,7 +149,7 @@ async function getPubli(req, res) {
 
 async function getPublis(req, res) {
     try {
-           const publis = await Publicacion.find();
+           const publis = await Publicacion.find({}, {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1});
            res.status(200).json(publis);
     }
     catch (err) {

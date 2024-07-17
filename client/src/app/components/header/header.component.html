@@ -10,16 +10,16 @@
         @if(token){
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item d-none d-lg-block">
-            <a class="nav-link" href="#" title="TOURS"><i class="bi bi-airplane"></i></a>
+            <a class="nav-link" routerLink="/publis" title="TOURS"><i class="bi bi-airplane"></i></a>
           </li>
           <li class="nav-item d-lg-none">
-            <a class="nav-link" href="#"><i class="bi bi-airplane"></i>TOURS</a>
+            <a class="nav-link" routerLink="/publis"><i class="bi bi-airplane"></i>TOURS</a>
           </li>
           <li class="nav-item d-none d-lg-block">
-            <a class="nav-link" href="#" title="PERFIL"><i class="bi bi-person-fill"></i></a>
+            <a class="nav-link" routerLink="/perfil/{{identity._id}}" title="PERFIL"><i class="bi bi-person-fill"></i></a>
           </li>
           <li class="nav-item d-lg-none">
-            <a class="nav-link" href="#"><i class="bi bi-person-fill"></i>PERFIL</a>
+            <a class="nav-link" routerLink="/perfil/{{identity._id}}"><i class="bi bi-person-fill"></i>PERFIL</a>
           </li>
           <li class="nav-item d-none d-lg-block">
             <a class="nav-link" href="#" title="MENSAJES"><i class="bi bi-envelope"></i></a>
@@ -28,14 +28,14 @@
             <a class="nav-link" href="#"><i class="bi bi-envelope"></i>MENSAJES</a>
           </li>
           <li class="nav-item d-none d-lg-block">
-            <a class="nav-link" role="button" (click)="logout()" title="LOGOUT"><i class="bi bi-envelope"></i></a>
+            <a class="nav-link" role="button" (click)="logout()" title="LOGOUT"><i class="bi bi-box-arrow-right"></i></a>
           </li>
           <li class="nav-item d-lg-none">
-            <a class="nav-link" role="button" (click)="logout()"><i class="bi bi-envelope"></i>LOGOUT</a>
+            <a class="nav-link" role="button" (click)="logout()"><i class="bi bi-box-arrow-right"></i>LOGOUT</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Usuarios" aria-label="Search">
+            <input class="form-control me-2" type="search" placeholder="Nick" aria-label="Search">
             <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
           </form>
         }

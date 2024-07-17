@@ -1,0 +1,37 @@
+<div class="col-lg-6 mx-auto reg">
+    <h1>CREAR PUBLICACION</h1>
+    <form [formGroup]="formCreatePubli" (ngSubmit)="onSubmit()">
+        <div class="mb-2">
+            <label for="titulo">Titulo</label>
+            <input type="text" id="titulo" class="form-control" formControlName="titulo">
+        </div>
+        <div class="mb-2">
+            <label for="pais">Pais</label>
+            <input type="text" id="pais" class="form-control" formControlName="pais">
+        </div>
+        <div class="mb-2">
+            <label for="ciudad">Ciudad</label>
+            <input type="text" id="ciudad" class="form-control" formControlName="ciudad">
+        </div>
+        <div class="mb-2">
+            <label for="continente">Continente</label>
+            <input type="text" id="continente" class="form-control" formControlName="continente">
+        </div>
+        @for(et of etapas; track $index){
+            <form [formGroup]="etapas[$index]">
+            <div class="mb-2">
+                <label for="titulo{{$index}}">Titulo Etapa {{$index + 1}}</label>
+                <input type="text" id="titulo{{$index}}" class="form-control" formControlName="titulo">
+            </div>
+            <div class="mb-2">
+                <label for="etapa{{$index}}">Texto Etapa {{$index + 1}}</label>
+                <input type="text" id="etapa{{$index}}" class="form-control" formControlName="texto">
+            </div>
+            </form>
+        }
+        <div class="mb-2">
+        <button type="button" (click)="addEtapa()">Añadir Etapa</button>
+        </div>
+        <input type="submit" [disabled]="!formCreatePubli.valid" value="Crear Publi" class="btn btn-primary">
+    </form>
+</div>

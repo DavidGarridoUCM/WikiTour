@@ -120,7 +120,6 @@ const userSchema = mongoose.Schema({
     },
     fotoPerfil: String,
     biografia: String,
-    puntuacion: Number,
     rol: {
         type: String,
         enum: ['user', 'admin'],
@@ -138,8 +137,8 @@ const userSchema = mongoose.Schema({
         type : Number,
         default : 0
     },
-    seguidos : [mongoose.Schema.ObjectId],
-    seguidores : [mongoose.Schema.ObjectId],
+    seguidos : [{type: mongoose.Schema.Types.ObjectId}],
+    seguidores : [{type: mongoose.Schema.Types.ObjectId}],
     notificaciones: [notiSchema],
     conversaciones:[conversacionSchema]
 },

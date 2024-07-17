@@ -1,0 +1,44 @@
+<h1>Titulo</h1>
+<p>{{publi.titulo}}</p>
+<h1>Ciudad</h1>
+<p>{{publi.ciudad}}</p>
+<h1>Pais</h1>
+<p>{{publi.pais}}</p>
+<h1>Continente</h1>
+<p>{{publi.continente}}</p>
+<h1>Nombre de Usuario</h1>
+<p>{{publi.usuario}}</p>
+@for(et of publi.etapas; track $index){
+    <h1>Etapa {{$index + 1}}</h1>
+    <h2>{{et.titulo}}</h2>
+    <p>{{et.texto}}</p>
+    <h3>Nombre de Usuario</h3>
+    <p>{{et.usuario}}</p>
+}
+
+<button (click)="modificarEtapas()">Modificar tour</button>
+
+@if(!like){
+    <button (click)="addLike()">Like</button>
+}
+@else{
+    <button (click)="deleteLike()">Dislike</button>
+}
+
+
+<h1>LIKES: {{publi.numlikes}}</h1>
+
+<form [formGroup]="comment" (ngSubmit)="addComent()">
+    <div class="mb-2">
+        <label for="texto">Añade un comentario</label>
+        <input type="text" id="texto" class="form-control" formControlName="texto">
+    </div>
+    <input type="submit" [disabled]="!comment.valid" value="Añadir" class="btn btn-primary">
+</form>
+
+<h1>COMENTARIOS</h1>
+@if(publi.comentarios.length != 0){
+    @for(c of publi.comentarios; track $index){
+        <p>{{c.texto}}</p>
+    }
+}

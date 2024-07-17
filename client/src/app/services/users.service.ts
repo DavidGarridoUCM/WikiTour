@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, firstValueFrom, tap } from 'rxjs';
 import { user } from '../models/user';
@@ -14,13 +14,12 @@ export class UsersService {
   public token: any;
   public user : user | undefined
   constructor() {
-    this.urlBase = "http://localhost:3800/user"
+    this.urlBase = "http://localhost:3800/user";
    }
 
   registro(formVal: any){
-      return firstValueFrom(
-        this.httpClient.post<any>(this.urlBase, formVal)
-      );
+      return this.httpClient.post<any>(this.urlBase, formVal);
+      
   }
 
   login(formVal: any): Observable<any>{
@@ -82,7 +81,7 @@ export class UsersService {
     if(typeof window !== 'undefined'){
       let id = localStorage.getItem("Identity");
       if(id != undefined){
-        this.identity = id;
+        this.identity = JSON.parse(id);
       }
       else{
         this.identity = null;
@@ -124,7 +123,30 @@ export class UsersService {
   }
 
   follow(idSeguidor: any, idSeguido: any)  : Observable<any> {
-    const body = {"idSeguidor": idSeguidor, "idSeguido" : idSeguido};
-    return this.httpClient.post<any>(this.urlBase + '/foll', body);
+    //ver si hacen falta headers
+    const headers = new HttpHeaders({'Content-Type' : 'application/json'});
+    const body = JSON.stringify({idSeguidor: idSeguidor, idSeguido : idSeguido});
+    return this.httpClient.post<any>(this.urlBase + '/foll', body, {headers: headers});
+  }
+
+  unfollow(idSeguidor: any, idSeguido: any)  : Observable<any> {
+    //ver si hacen falta headers
+    const headers = new HttpHeaders({'Content-Type' : 'application/json'});
+    const body = JSON.stringify({idSeguidor: idSeguidor, idSeguido : idSeguido});
+    return this.httpClient.post<any>(this.urlBase + '/unfoll', body, {headers: headers});
+  }
+
+  isFollowed(idSeguidor: any, idSeguido: any) : Observable<any> {
+    const headers = new HttpHeaders({'Content-Type' : 'application/json'});
+    const body = JSON.stringify({idSeguidor: idSeguidor, idSeguido : idSeguido});
+    return this.httpClient.post<any>(this.urlBase + '/folled', body, {headers: headers});
+  }
+
+  getNickAndIdUsers() : Observable<any>{
+    return this.httpClient.get<any>('http://localhost:3800/users');
+  }
+
+  updateUser(id: any, formVal: any) : Observable<any>{
+    return this.httpClient.post<any>(this.urlBase + '/upd/' + id, formVal);
   }
 }

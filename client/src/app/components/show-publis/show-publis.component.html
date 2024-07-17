@@ -1,0 +1,11 @@
+@for(p of publis; track $index){
+    <div class="tour">
+    <a class="nav-link" routerLink="/publi/{{p._id}}">
+    <h1>{{p.titulo}}</h1>
+    <p>{{p.ciudad}}</p>
+    <p>{{p.pais}}</p>
+    <p>{{p.continente}}</p>
+    </a>
+    </div>
+}
+

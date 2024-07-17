@@ -32,10 +32,26 @@ async function deleteUsuario(req, res) {
 }
 
 async function updateUsuario(req, res) {
-       try {
+       try {  
               const { id } = req.params;
-              const usu = await Usuario.findByIdAndUpdate(id, req.body);
-              res.status(200).json(usu);
+              const usu = await Usuario.findOne({'_id': id}, {'_id': 1, 'password' : 1});
+              if(usu){
+                     bcrypt.compare(req.body.password, usu.password, async function(err, ok){
+                            if(err){
+                                   console.log(err.message);
+                            }
+                            if(ok){
+                                   if(req.body.newPassword != ''){
+                                          req.body.password = req.body.newPassword;
+                                   }
+                                   const us = await Usuario.findByIdAndUpdate(usu._id, req.body);
+                                   return res.status(200).send(us);
+                            }
+                            else{
+                                   return res.status(200).send({message: "Not Match"});
+                            }
+                     })
+              }
        }
        catch (err) {
               console.log(err.message);
@@ -46,7 +62,7 @@ async function getUsuario(req, res) {
        try {
               const { id } = req.params;
               const usu = await Usuario.findOne({'_id': id}, {'_id': 1, 'nombre': 1,
-              'apellidos': 1, 'nick': 1, 'fotoPerfil': 1, 'numSeguidores' : 1, 'numSeguidos' : 1, 'publicaciones' : 1});
+              'apellidos': 1, 'nick': 1, 'fotoPerfil': 1, 'numSeguidores' : 1, 'numSeguidos' : 1, 'publicaciones' : 1, 'email': 1});
               res.status(200).json(usu);
        }
        catch (err) {
@@ -70,7 +86,7 @@ async function getUsuarios(req, res) {
                      usuarios = await Usuario.find({'_id': id}, {'bloqueados': 1, '_id': 0});
               }
               else {
-                     usuarios = await Usuario.find();
+                     usuarios = await Usuario.find({}, {'_id': 1, 'nick': 1});
                      res.status(200).json(usuarios); 
               }
               
@@ -147,44 +163,12 @@ async function addMensaje(req, res) {
        }
 }
 
-
-async function addSeguidor(req, res) {
+async function isFollowed(req, res){
        try {  
               var idSeguidor  = req.body.idSeguidor;
               var idSeguido = req.body.idSeguido;
-              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$push : {'seguidores' : idSeguidor}, $inc: {'numSeguidores': 1}}, {returnNewDocument: true}).exec();
-              res.status(200).send({message: "Seguidor añadido"});
-       }
-       catch (err) {
-              console.log(err.message);
-       }
-}
-
-async function deleteSeguidor(req, res) {
-       try {  
-              var idSeguidor  = req.body.idSeguidor;
-              var idSeguido = req.body.idSeguido;
-              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$pull : {'seguidos._id' : idSeguidor}, $inc: {'numSeguidores': -1}}, {upsert: true}).exec();
-              res.status(200).send({message: "Seguidor eliminado"});
-       }
-       catch (err) {
-              //Poner error
-              res.status(200).send({message: "Added"});
-       }
-}
-
-async function addSeguido(req, res) {
-       try {  
-              try {  
-                     var idSeguidor  = req.body.idSeguidor;
-                     var idSeguido = req.body.idSeguido;
-                     var idSeg = mongoose.Types.ObjectId(idSeguido);
-                     await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$push : {'seguido' : idSeg}, $inc: {'numSeguidos': 1}}, {upsert: true}).exec();
-                     res.status(200).send({message: "Seguido añadido"});
-              }
-              catch (err) {
-                     console.log(err.message);
-              }
+              const usu = await Usuario.findOne({'_id': idSeguido, 'seguidores': idSeguidor}).exec();
+              res.status(200).send(usu);
               
        }
        catch (err) {
@@ -192,18 +176,35 @@ async function addSeguido(req, res) {
        }
 }
 
-async function deleteSeguido(req, res) {
+
+
+async function follow(req, res) {
        try {  
               var idSeguidor  = req.body.idSeguidor;
-                     var idSeguido = req.body.idSeguido;
-                     await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$pull : {'seguido' : idSeguido}, $inc: {'numSeguidos': -1}}, {upsert: true}).exec();
-                     res.status(200).send({message: "Seguido eliminado"});
+              var idSeguido = req.body.idSeguido;
+              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$addToSet : {'seguidores' : idSeguidor}, $inc: {'numSeguidores': 1}}).exec();
+              await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$addToSet : {'seguidos' : idSeguido}, $inc: {'numSeguidos': 1}}).exec();
+              res.status(200).send({message: "Follow hecho"});
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+async function unfollow(req, res) {
+       try {  
+              var idSeguidor  = req.body.idSeguidor;
+              var idSeguido = req.body.idSeguido;
+              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$pull : {'seguidores' : idSeguidor}, $inc: {'numSeguidores': -1}}).exec();
+              await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$pull : {'seguidos' : idSeguido}, $inc: {'numSeguidos': -1}}).exec();
+              res.status(200).send({message: "Unfollow"});
        }
        catch (err) {
               //Poner error
               res.status(200).send({message: "Added"});
        }
 }
+
 
 async function addNoti(req, res) {
        try {  
@@ -241,5 +242,4 @@ async function addNoti(req, res) {
 }
 
 module.exports = {createUsuario, deleteUsuario, updateUsuario, getUsuario, getUsuarios, 
-       loginUsuario, addMensaje, addSeguidor, addSeguido, addNoti, 
-        deleteSeguido, deleteSeguidor};
+       loginUsuario, addMensaje, follow, addNoti, unfollow, isFollowed};

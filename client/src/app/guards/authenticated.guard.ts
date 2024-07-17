@@ -10,6 +10,7 @@ export const AuthenticatedGuard: CanActivateFn = (route, state) => {
     return router.navigate(['']);
   }
   else{
+    usersService.logout();
     return true;
   }
 };

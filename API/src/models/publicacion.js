@@ -41,16 +41,10 @@ const cambioSchema = mongoose.Schema({
         required: true
     },   
     usuario:{
-        type: userRedPSchema,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     adjuntos:[adjuntoSchema],
-    tipo:{
-        type: String,
-        enum: ['original', 'cambio'],
-        default:'original',
-        required: true
-    },
     fecha:{
         type: Date, 
         default: Date.now
@@ -63,19 +57,15 @@ const etapaSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    usuario:{
+        type: String,
+        required: true
+    },
     texto: {
         type: String,
         required: true
     },
-    adjuntos:[adjuntoSchema],
-    propuestos:[cambioSchema],
-    aceptados: [cambioSchema],
-    tipo:{
-        type: String,
-        enum: ['original', 'cambio'],
-        default:'original',
-        required: true
-    }
+    adjuntos:[adjuntoSchema]
 });
 
 const comentSchema = mongoose.Schema({
@@ -88,9 +78,8 @@ const comentSchema = mongoose.Schema({
 
 const publicacion = mongoose.Schema({
     usuario: {
-        type: userRedPSchema,
-        required: true,
-        unique: true
+        type: String,
+        required: true
     },
     titulo: {
         type: String,
@@ -104,7 +93,11 @@ const publicacion = mongoose.Schema({
         type: Date, 
         default: Date.now
     },
-    likes: Number,
+    numlikes: {
+        type: Number,
+        default: 0
+    },
+    likes:[String],
     comentarios:[comentSchema],
     puntuacion:Number,
     ciudad:{

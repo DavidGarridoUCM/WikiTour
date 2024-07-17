@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsersService } from '../../services/users.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,6 +15,7 @@ import { UsersService } from '../../services/users.service';
 
 export class RegisterComponent{
 
+    private router: Router = new Router;
     usersService = inject(UsersService);
     formReg : FormGroup;
 
@@ -28,8 +30,39 @@ export class RegisterComponent{
     }
 
     async onSubmit() {
-     const response = await this.usersService.registro(this.formReg.value);
-     console.log(response);
+     await this.usersService.registro(this.formReg.value).subscribe(
+      {next: () => {
+        this.login();
+      },
+      error: (err) => {
+        console.log(err.errorMessage);
+      }
+    }
+     );
+    }
+
+    login(){
+      this.usersService.login(this.formReg.value).subscribe(
+        {next: () => {
+          this.logtoken();
+        },
+        error: (err) => {
+          console.log(err.errorMessage);
+        }
+      }
+      );
+    }
+
+    logtoken(){
+      this.formReg.addControl('gettoken', new FormControl<boolean>(true));
+      this.usersService.loginToken(this.formReg.value).subscribe(
+      {next: () => {
+          this.router.navigate(['']); //Cuando haga el home que lleve a home o a timeline
+        },
+      error: (err) => {
+        console.log(err.errorMessage);
+        }
+      });
     }
 
 }
