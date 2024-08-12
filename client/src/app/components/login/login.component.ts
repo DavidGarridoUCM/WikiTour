@@ -24,10 +24,16 @@ export class LoginComponent{
 
     onSubmit() {
       this.usersService.login(this.formLog.value).subscribe(
-        {next: () => {
-          this.logtoken();
+        {next: (response) => {
+          console.log(response);
+          if(response._id){
+            this.logtoken();
+          }
+          else{
+            alert(response.message);
+          }
         },
-        error: (err) => {
+        error: (err) => { 
           console.log(err.errorMessage);
         }
       }

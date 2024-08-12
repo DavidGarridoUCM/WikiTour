@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { publi } from '../../models/publicacion';
 import { PubliService } from '../../services/publi.service';
 import { UsersService } from '../../services/users.service';
@@ -8,7 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 @Component({
   selector: 'app-publi',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './publi.component.html',
   styleUrl: './publi.component.scss'
 })
@@ -24,7 +24,8 @@ export class PubliComponent implements OnInit{
   public comment : FormGroup;
   public etapasUsers : Array<String> = [];
   public namePubli : String = '';
-  public publi: publi = new publi('', '', '', [], '', 0, [], [], -1, '', '', '');
+  public publi: publi = new publi('', {idUsu : '', nombre : '', apellidos : '',
+    nick :'', fotoPerfil :''}, '', [], '', 0, [], [], -1, '', '', '');
 
   constructor() {
     this.comment = new FormGroup({
@@ -39,11 +40,9 @@ export class PubliComponent implements OnInit{
   isLike(likes: Array<String>){
     if(likes.includes(this.userId)){
       this.like = true;
-      console.log('Si');
     }
     else{
       this.like = false;
-      console.log('no');
     }
   }
 

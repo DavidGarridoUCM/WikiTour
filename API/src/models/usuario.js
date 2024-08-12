@@ -6,6 +6,10 @@ const { response } = require('express');
 
 //meter foto de perfil aqui y en los usos en el controller, etc
 const userRedSchema = mongoose.Schema({
+    idUsu:{
+        type: String,
+        required: true
+    },
     nombre: {
         type: String,
         required: true
@@ -17,6 +21,9 @@ const userRedSchema = mongoose.Schema({
     nick: {
         type: String,
         required: true
+    },
+    fotoPerfil:{
+        type: String
     }},
     {
         autoCreate: false,
@@ -137,8 +144,8 @@ const userSchema = mongoose.Schema({
         type : Number,
         default : 0
     },
-    seguidos : [{type: mongoose.Schema.Types.ObjectId}],
-    seguidores : [{type: mongoose.Schema.Types.ObjectId}],
+    seguidos : [userRedSchema],
+    seguidores : [userRedSchema],
     notificaciones: [notiSchema],
     conversaciones:[conversacionSchema]
 },

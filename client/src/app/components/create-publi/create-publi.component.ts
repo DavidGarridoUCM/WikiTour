@@ -45,7 +45,9 @@ export class CreatePubliComponent {
   }
 
   async onSubmit() {
-    this.formCreatePubli.addControl('usuario', new FormControl<string>(this.user.nick));
+    //this.formCreatePubli.addControl('usuario', new FormControl<string>(this.user.nick));
+    let usuario = '"usuario": { "idUsu": "' + this.user._id + '", "nombre": "' + this.user.nombre + 
+    '", "apellidos": "' + this.user.apellidos + '", "nick": "' + this.user.nick + '"}'
     console.log(this.formCreatePubli.value);
     let b = JSON.stringify(this.formCreatePubli.value);
     let body = b.slice(0, -1);
@@ -57,7 +59,7 @@ export class CreatePubliComponent {
       index++;
     }
     let etapas = etap.slice(0, -1);
-    body += etapas + "]}";
+    body += etapas + "]," + usuario + "}";
     console.log(body);
     await this.publiService.createPubli(body).subscribe(
       {next: () => {

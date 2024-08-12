@@ -3,6 +3,10 @@
 var mongoose = require('mongoose');
 
 const userRedPSchema = mongoose.Schema({
+    idUsu:{
+        type: String,
+        required: true
+    },
     nombre: {
         type: String,
         required: true
@@ -16,8 +20,7 @@ const userRedPSchema = mongoose.Schema({
         unique: true,
         required: true
     },
-    fotoPerfil: String,
-    puntuacion: Number
+    fotoPerfil: String
 },
 {
     autoCreate: false,
@@ -78,7 +81,7 @@ const comentSchema = mongoose.Schema({
 
 const publicacion = mongoose.Schema({
     usuario: {
-        type: String,
+        type: userRedPSchema,
         required: true
     },
     titulo: {

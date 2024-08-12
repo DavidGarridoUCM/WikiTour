@@ -1,31 +1,113 @@
-<div class="col-lg-6 mx-auto reg">
-    <h1>ACTUALIZAR DATOS</h1>
-    <form [formGroup]="formChange" (ngSubmit)="onSubmit()">
-        <div class="mb-2">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" class="form-control" formControlName="nombre">
+<div class="container">
+    <div class="row">
+            <div class="col-12">
+                <!-- Form START -->
+                <form class="file-upload" [formGroup]="formChange" (ngSubmit)="onSubmit()">
+                    <div class="row mb-5 gx-5">
+                        <!-- Contact detail -->
+                        <div class="col-xxl-8 mb-5 mb-xxl-0">
+                            <div class="bg-secondary-soft px-4 py-5 rounded">
+                                <div class="row g-3">
+                                    <h4 class="mb-4 mt-0">Mis datos</h4>
+                                    <!-- First Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                                        <input type="text" id="nombre" class="form-control" formControlName="nombre">
+                                    </div>
+                                    <!-- Last name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Apellidos <span class="text-danger">*</span></label>
+                                        <input type="text" id="apellidos" class="form-control" formControlName="apellidos">
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Correo electronico <span class="text-danger">*</span></label>
+                                        <input type="email" id="email" class="form-control" formControlName="email">
+                                    </div>
+                                    <!-- Skype -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Nombre de usuario <span class="text-danger">*</span></label>
+                                        <input type="text" id="nick" class="form-control" formControlName="nick">
+                                    </div>
+                                </div> <!-- Row END -->
+                            </div>
+                        </div>
+                        <!-- Upload profile -->
+                        <div class="col-xxl-4">
+                            <div class="bg-secondary-soft px-4 py-5 rounded">
+                                <div class="row g-3">
+                                    <h4 class="mb-4 mt-0">Foto de perfil</h4>
+                                    <div class="text-center">
+                                        <!-- Image upload -->
+                                         
+                                            <div class="imagen square position-relative display-2 mb-3">
+                                                @if(user.fotoPerfil == null){
+                                                <i class="bi bi-image"></i>
+                                                }
+                                                @else{
+                                                   <!-- <img src="{{user.fotoPerfil}}"> -->
+                                                }
+                                            </div>
+                                         
+                                        <!-- Button -->
+                                        <input type="file" id="customFile" name="image" hidden="">
+                                        
+                                        @if(user.fotoPerfil == null){
+                                            <button type="button" class="btn btn-danger-soft">Subir foto</button>
+                                        }
+                                        @else{
+                                            <button type="button" class="btn btn-danger-soft">Actualizar</button>
+                                            <button type="button" class="btn btn-danger-soft">Eliminar</button>
+                                        }
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Row END -->
+
+                    <div class="row mb-5 gx-5">
+                        <!-- change password -->
+                        <div class="col-xxl-6">
+                            <div class="bg-secondary-soft px-4 py-5 rounded">
+                                <div class="row g-3">
+                                    <h4 class="my-4">Cambiar contraseña</h4>
+                                    <!-- Old password -->
+                                    <div class="col-md-6">
+                                        <label for="exampleInputPassword1" class="form-label">Contraseña actual <span class="text-danger">*</span></label>
+                                        <input type="password" id="password" class="form-control" formControlName="password">
+                                        @if(formChange.controls['password'].invalid && (formChange.controls['password'].dirty || formChange.controls['password'].touched)){
+                                        @if(formChange.controls['password'].errors?.['required']){ 
+                                            <small class="text-danger">
+                                                Este campo es necesario
+                                            </small>
+                                        }
+                                      }
+                                      
+                                    </div>
+                                    
+                                    <!-- New password -->
+                                    <div class="col-md-6">
+                                        <label for="exampleInputPassword2" class="form-label">Nueva contraseña </label>
+                                        <input type="password" id="newPassword" class="form-control" formControlName="newPassword">
+                                        @if(formChange.controls['newPassword'].invalid && (formChange.controls['newPassword'].dirty || formChange.controls['newPassword'].touched)){
+                                        @if(formChange.controls['newPassword'].errors?.['pattern']){ 
+                                          <small class="text-danger">
+                                              La contraseña tiene que tener al menos 8 caracteres. Al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial.
+                                          </small>
+                                      }
+                                      }
+                                    </div>    
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Row END -->
+                    <!-- button -->
+                    <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                        <button type="button" [disabled]="!formChange.valid" class="btn btn-danger btn-lg">Delete profile</button>
+                        <button type="submit" [disabled]="!formChange.valid" class="btn btn-primary btn-lg">Update profile</button>
+                    </div>
+                </form> <!-- Form END -->
+            </div>
         </div>
-        <div class="mb-2">
-            <label for="apellidos">Apellidos</label>
-            <input type="text" id="apellidos" class="form-control" formControlName="apellidos">
         </div>
-        <div class="mb-2">
-            <label for="nick">Username</label>
-            <input type="text" id="nick" class="form-control" formControlName="nick">
-        </div>
-        <div class="mb-2">
-            <label for="email">Correo electronico</label>
-            <input type="text" id="email" class="form-control" formControlName="email">
-        </div>
-        <div class="mb-2">
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" class="form-control" formControlName="password">
-        </div>
-        <div class="mb-2">
-            <label for="newPassword">Nueva Contraseña</label>
-            <input type="password" id="newPassword" class="form-control" formControlName="newPassword">
-        </div>
-        <p>Al cambiar los datos tendra que iniciar sesion de nuevo!</p>
-        <input type="submit" [disabled]="!formChange.valid" value="Actualizar datos" class="btn btn-primary">
-    </form>
-</div>

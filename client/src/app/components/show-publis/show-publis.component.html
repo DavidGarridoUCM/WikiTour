@@ -1,11 +1,74 @@
-@for(p of publis; track $index){
-    <div class="tour">
-    <a class="nav-link" routerLink="/publi/{{p._id}}">
-    <h1>{{p.titulo}}</h1>
-    <p>{{p.ciudad}}</p>
-    <p>{{p.pais}}</p>
-    <p>{{p.continente}}</p>
-    </a>
+<div class="row height d-flex justify-content-center align-items-center mt-3">
+<div class="col-md-6">
+
+    <div class="form">
+      <i class="fa fa-search"></i>
+      <input type="text" class="form-control form-input" [(ngModel)]="search"
+      placeholder="Título, ciudad, pais, continente ..."
+      (keyup)="lista()">
+      <span class="left-pan"><i class="fa fa-microphone"></i></span>
     </div>
+    
+  </div>
+</div>
+@for(pub of publis | paginate : { itemsPerPage: 15, currentPage: p }; track $index){
+    <div class="container mt-4">  
+    
+      <div class="card p-3">
+          <div class="row">
+              
+             
+              <div class="col-md-4">
+                <a class="nav-link" routerLink="/publi/{{pub._id}}"> 
+                  <div class="position-relative snipimage">
+                     <!-- <img src="images/tourGen.jpg" class="rounded img-fluid w-100 img-responsive">-->
+                  </div> 
+                </a>
+              </div>
+           
+              <div class="col-md-8">
+                  <div class="mt-2">
+                    <a class="nav-link" routerLink="/publi/{{pub._id}}"> 
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h5 class="mb-1 titulo">{{pub.titulo}}</h5>
+                    </div>
+                    </a>
+                    <div class="d-flex justify-content-md-start justify-content-between views-content mt-2">  
+                        <div class="d-flex flex-row align-items-center ms-2">
+                            <i class="fa fa-heart"></i>
+                            <a class="nav-link" routerLink="/publis/{{pub.ciudad}}">
+                               <span class="ms-1 views">{{pub.ciudad}}</span>
+                            </a>
+                            <a class="nav-link" routerLink="/publis/{{pub.pais}}">
+                                <span class="ms-1 views">{{pub.pais}}</span>
+                            </a>
+                            <a class="nav-link" routerLink="/publis/{{pub.continente}}">
+                                <span class="ms-1 views">{{pub.continente}}</span>
+                            </a>
+                        </div>  
+                    </div>
+                    <a class="nav-link" routerLink="/perfil/{{pub.usuario.idUsu}}">
+                    <div class="d-flex flex-row mt-3">
+                      
+                      @if(pub.usuario.fotoPerfil){
+                        <img src="https://i.imgur.com/rvQ3LAt.jpg" width="50" class="rounded-circle">
+                      }
+                      @else{
+                        <img src="images/userGenProfile.jpg" width="50" class="rounded-circle">
+                      }
+                        <div class="ms-2 d-flex flex-column">
+                           <div class="d-flex flex-row align-items-center">
+                                <h6>{{pub.usuario.nombre + ' ' + pub.usuario.apellidos}}</h6>
+                           </div>
+                          <span class="days-ago">{{pub.usuario.nick}}</span>
+                        </div> 
+                      
+                    </div></a>
+                  </div>     
+              </div> 
+          </div>
+      </div>
+  </div>
 }
 
+<pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>

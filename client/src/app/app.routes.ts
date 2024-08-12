@@ -10,9 +10,12 @@ import { CreatePubliComponent } from './components/create-publi/create-publi.com
 import { PubliComponent } from './components/publi/publi.component';
 import { ModificarTourComponent } from './components/modificar-tour/modificar-tour.component';
 import { ShowPublisComponent } from './components/show-publis/show-publis.component';
+import { UsersComponent } from './components/users/users.component';
 
 export const routes: Routes = [
-    //{path: "", component: AppComponent},
+    {path: "", component: ShowPublisComponent, canActivate: [AuthGuard]},
+    {path: "home", component: ShowPublisComponent, canActivate: [AuthGuard]},
+    {path: "publis/:search", component: ShowPublisComponent, canActivate: [AuthGuard]},
     {path: "register", component: RegisterComponent, canActivate: [AuthenticatedGuard]},
     {path: "login", component: LoginComponent, canActivate: [AuthenticatedGuard]},
     {path: "perfil/:id", component: PerfilComponent, canActivate: [AuthGuard]},
@@ -20,5 +23,5 @@ export const routes: Routes = [
     {path: "crearPubli", component: CreatePubliComponent, canActivate: [AuthGuard]},
     {path: "publi/:id", component: PubliComponent, canActivate: [AuthGuard]},
     {path: "modPubli/:id", component: ModificarTourComponent, canActivate: [AuthGuard]},
-    {path: "publis", component: ShowPublisComponent, canActivate: [AuthGuard]}
+    {path: "users", component: UsersComponent, canActivate: [AuthGuard]}
 ];

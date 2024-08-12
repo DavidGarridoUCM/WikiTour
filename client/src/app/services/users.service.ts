@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, firstValueFrom, tap } from 'rxjs';
+import { Observable, firstValueFrom, tap, throwError } from 'rxjs';
 import { user } from '../models/user';
 
 @Injectable({
@@ -17,9 +17,8 @@ export class UsersService {
     this.urlBase = "http://localhost:3800/user";
    }
 
-  registro(formVal: any){
+  registro(formVal: any) : Observable<any>{
       return this.httpClient.post<any>(this.urlBase, formVal);
-      
   }
 
   login(formVal: any): Observable<any>{
@@ -40,6 +39,7 @@ export class UsersService {
             var errorMessage = <any>error;
             console.log(errorMessage);
             if (errorMessage != null) {
+              throwError(() => errorMessage);
               console.log('Error en login');
             }
           }
@@ -59,7 +59,7 @@ export class UsersService {
         }
         else {
           //Meter el token al localStorage
-          localStorage.setItem('token', this.token);
+          this.setToken(this.token);
         }
       },
       error: error => {
@@ -73,8 +73,8 @@ export class UsersService {
   }
 
   logout(){
-    localStorage.removeItem('Identity');
-    localStorage.removeItem('token');
+      localStorage.removeItem('Identity');
+      localStorage.removeItem('token');
   }
 
   getIdentity(){
@@ -93,6 +93,12 @@ export class UsersService {
     return this.identity;
   }
 
+  setIdentity(formVal : any){
+    if(typeof window !== 'undefined'){
+      localStorage.setItem('Identity', formVal);
+    }
+  }
+
   isLogged(){
     const tok = this.getToken();
     if(tok == null){
@@ -100,7 +106,13 @@ export class UsersService {
     }
       const payload = JSON.parse(atob(tok.split('.')[1]));
       const exp = payload.exp * 1000;
-      return Date.now() < exp;
+      if(Date.now() < exp){
+        return true;
+      }
+      else{
+        localStorage.clear();
+        return false;
+      }
   }
 
   getToken(){
@@ -116,6 +128,10 @@ export class UsersService {
     else{
       return null;
     }
+  }
+
+  setToken(token: any){
+    localStorage.setItem('token', token);
   }
 
   getUser(id: any) : Observable<any>{
@@ -142,8 +158,8 @@ export class UsersService {
     return this.httpClient.post<any>(this.urlBase + '/folled', body, {headers: headers});
   }
 
-  getNickAndIdUsers() : Observable<any>{
-    return this.httpClient.get<any>('http://localhost:3800/users');
+  getUsers(n : string) : Observable<any>{
+    return this.httpClient.get<any>('http://localhost:3800/users/' + n);
   }
 
   updateUser(id: any, formVal: any) : Observable<any>{

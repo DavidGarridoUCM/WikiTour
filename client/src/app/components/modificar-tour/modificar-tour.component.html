@@ -1,21 +1,36 @@
-<h1>Titulo</h1>
-<p>{{publi.titulo}}</p>
-<h1>Ciudad</h1>
-<p>{{publi.ciudad}}</p>
-<h1>Pais</h1>
-<p>{{publi.pais}}</p>
-<h1>Continente</h1>
-<p>{{publi.continente}}</p>
-<h1>Nombre de Usuario</h1>
-<p>{{publi.usuario}}</p>
-@for(et of publi.etapas; track $index){
-    <h1>Etapa {{$index + 1}}</h1>
-    <h2>{{et.titulo}}</h2>
-    <form [formGroup]="etapas[$index]">
-        <div class="mb-2">
-            <label for="etapa{{$index}}">Texto Etapa {{$index + 1}}</label>
-            <input type="text" id="etapa{{$index}}" class="form-control" formControlName="texto">
+<div class="container mt-5 todo">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1">{{publi.titulo}}</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2">Posted by {{publi.usuario.nick}}</div>
+                    <!-- Post categories-->
+                    <a class="badge bg-secondary text-decoration-none link-light" >{{publi.ciudad}}</a>
+                    <a class="badge bg-secondary text-decoration-none link-light" >{{publi.pais}}</a>
+                    <a class="badge bg-secondary text-decoration-none link-light" >{{publi.continente}}</a>
+                </header>
+                <!-- Preview image figure-->
+                <!--<figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>-->
+                <!-- Post content-->
+                
+                <section class="mb-5">
+                    @for(et of publi.etapas; track $index){
+                    <h2 class="fw-bolder mb-1">{{et.titulo}}</h2>
+                    <div class="text-muted fst-italic mb-2">Posted by {{et.usuario}}</div>
+                    <form [formGroup]="etapas[$index]">
+                        <div class="mb-2">
+                            <input type="text" id="etapa{{$index}}" class="form-control" formControlName="texto">
+                        </div>
+                    </form>
+                }
+                </section>
+            </article>
+            <button (click)="sub()">Modificar</button>
         </div>
-    </form>
-}
-<button (click)="sub()">Modificar</button>
+    </div>
+</div>

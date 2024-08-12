@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { publi } from '../../models/publicacion';
 import { PubliService } from '../../services/publi.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,15 +9,17 @@ import { user } from '../../models/user';
 @Component({
   selector: 'app-modificar-tour',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './modificar-tour.component.html',
   styleUrl: './modificar-tour.component.scss'
 })
 export class ModificarTourComponent implements OnInit{
   
-  public publi: publi = new publi('', '', '', [], '', 0, [], [], -1, '', '', '');
+  public publi: publi = new publi('', {idUsu : '', nombre : '', apellidos : '',
+    nick :'', fotoPerfil :''}, '', [], '', 0, [], [], -1, '', '', '');
   private publiService = inject(PubliService);
   private usersService = inject(UsersService);
+  private router: Router = new Router;
   private id: any;
   private route = inject(ActivatedRoute);
   public etapas : Array<FormGroup> = [];
@@ -62,7 +64,7 @@ export class ModificarTourComponent implements OnInit{
     this.publiService.updatePubli(this.publi.etapas, this.id).subscribe(
       {next: (response) => {
         if(response != undefined){
-          location.reload();
+          this.router.navigate(['/publi/'+ this.id]); 
         }
       },
       error: (e) => console.error(e)

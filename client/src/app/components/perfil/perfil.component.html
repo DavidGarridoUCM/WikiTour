@@ -1,56 +1,66 @@
-<section class="w-100 px-4 py-5" style="background-color: #9de2ff; border-radius: .5rem .5rem 0 0;">
-    <div class="row d-flex justify-content-center">
-      <div class="col col-md-9 col-lg-7 col-xl-6">
-        <div class="card" style="border-radius: 15px;">
-          <div class="card-body p-4">
-            <div class="d-flex">
-              <div class="flex-shrink-0">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
-                  alt="Generic placeholder image" class="img-fluid" style="width: 180px; border-radius: 10px;">
-              </div>
-              <div class="flex-grow-1 ms-3">
-                <h5 class="mb-1">{{user.nombre + ' ' + user.apellidos}}</h5>
-                <p class="mb-2 pb-1">{{user.biografia}}</p>
-                <div class="d-flex justify-content-start rounded-4 p-2 mb-2 bg-body-tertiary">
-                  <div>
-                    <p class="small text-muted mb-1">Publicaciones</p>
-                    <p class="mb-0">{{user.publicaciones}}</p>
-                  </div>
-                  <div class="px-3">
-                    <p class="small text-muted mb-1">Seguidores</p>
-                    <p class="mb-0">{{user.numSeguidores}}</p>
-                  </div>
-                  <div>
-                    <p class="small text-muted mb-1">Puntuacion</p>
-                    <p class="mb-0">{{user.puntuacion}}</p>
-                  </div>
-                </div>
-                
-                @if(!miPerfil()){
-                  <div class="d-flex pt-1">
-                  <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-primary me-1 flex-grow-1">Chat</button>
-                  @if(isFollow == true){
-                    <button  type="button" (click)='unfollow()' data-mdb-button-init data-mdb-ripple-init class="btn btn-primary flex-grow-1">Unfollow</button>
-                  }
-                  @else{
-                    <button  type="button" (click)='follow()' data-mdb-button-init data-mdb-ripple-init class="btn btn-primary flex-grow-1">Follow</button>
-                  }
-                  </div>
+<section class="h-100 gradient-custom-2">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center">
+        <div class="col col-lg-9 col-xl-8">
+          <div class="card">
+            <div class="rounded-top text-white d-flex flex-row" style="background-color: rgb(188, 152, 221); height:200px;">
+              <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                @if(user.fotoPerfil == null){
+                  <img src="images/userGenProfile.jpg"
+                  alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                  style="width: 150px; z-index: 1">
                 }
                 @else{
-                  <div class="d-flex justify-content-start rounded-4 p-2 mb-2 bg-body-tertiary">
-                  <div>
-                    <p class="small text-muted mb-1">Correo Electronico</p>
-                    <p class="mb-0">{{user.email}}</p>
-                  </div>
-                  <div class="px-3">
-                    <p class="small text-muted mb-1">Nombre Usuario</p>
-                    <p class="mb-0">{{user.nick}}</p>
-                  </div>
-                  <a class="navlink" routerLink="/perfilData"><p>Cambiar datos</p></a>
-                  </div>
-                  }  
+                  <!--Poner foto de perfil-->
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                  alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                  style="width: 150px; z-index: 1">
+                }
+                  @if(!miPerfil()){
+                    <button  type="button" class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                      Mensaje
+                    </button>
+                    @if(isFollow == true){
+                    <button  type="button" (click)='unfollow()' class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                      Dejar de seguir
+                    </button>
+                    }
+                    @else{
+                    <button  type="button" (click)='follow()' class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                      Seguir
+                    </button>
+                    }
+                  }
+                  @else{
+                    <button  type="button" routerLink="/perfilData" class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                      Editar perfil
+                    </button>
+                  }
+                
               </div>
+              <div class="ms-3" style="margin-top: 130px;">
+                <h5>{{user.nombre + ' ' + user.apellidos}}</h5>
+                <p>{{user.nick}}</p>
+              </div>
+            </div>
+            <div class="p-4 text-black bg-body-tertiary">
+              <div class="d-flex justify-content-end text-center py-1 text-body">
+                <div>
+                  <p class="mb-1 h5">{{user.publicaciones}}</p>
+                  <p class="small text-muted mb-0">Tours</p>
+                </div>
+                <div class="px-3">
+                  <p class="mb-1 h5">{{user.numSeguidores}}</p>
+                  <p class="small text-muted mb-0">Seguidores</p>
+                </div>
+                <div>
+                  <p class="mb-1 h5">{{user.numSeguidores}}</p>
+                  <p class="small text-muted mb-0">Seguidos</p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-4 text-black">
+              
             </div>
           </div>
         </div>

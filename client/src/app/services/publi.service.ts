@@ -29,7 +29,11 @@ export class PubliService {
     return this.httpClient.post<any>(this.urlBase + '/upd/' + id, etapas);
   }
 
-  getPublis() : Observable<any>{
+  getPublis(search : string) : Observable<any>{
+    return this.httpClient.get<any>(this.urlBase + 's' + '/' + search);
+  }
+
+  lastPublis() : Observable<any>{
     return this.httpClient.get<any>(this.urlBase + 's');
   }
 

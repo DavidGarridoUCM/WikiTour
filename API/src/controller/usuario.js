@@ -7,7 +7,9 @@ const { default: mongoose } = require('mongoose');
 async function createUsuario(req, res) {
        try {  
               const usu = await Usuario.create(req.body);           
-              res.status(200).json(usu);
+              res.status(200).send({
+                     token : jwt.createToken(usu)
+              })
        }
        catch (err) {
               if (err.keyValue.email != null && err.name === "MongoServerError" && err.code === 11000) {
@@ -38,7 +40,7 @@ async function updateUsuario(req, res) {
               if(usu){
                      bcrypt.compare(req.body.password, usu.password, async function(err, ok){
                             if(err){
-                                   console.log(err.message);
+                                   return res.status(500).send({message: "Not Match"});
                             }
                             if(ok){
                                    if(req.body.newPassword != ''){
@@ -48,7 +50,7 @@ async function updateUsuario(req, res) {
                                    return res.status(200).send(us);
                             }
                             else{
-                                   return res.status(200).send({message: "Not Match"});
+                                   return res.status(500).send({message: "Not Match"});
                             }
                      })
               }
@@ -73,7 +75,7 @@ async function getUsuario(req, res) {
 async function getUsuarios(req, res) {
        try {
               var usuarios;
-              if(res.tipo = 'seguidos'){
+              if(res.tipo == 'seguidos'){
                      const { id } = req.params;
                      usuarios = await Usuario.find({'_id': id}, {'seguidos': 1, '_id': 0});
               }
@@ -86,7 +88,8 @@ async function getUsuarios(req, res) {
                      usuarios = await Usuario.find({'_id': id}, {'bloqueados': 1, '_id': 0});
               }
               else {
-                     usuarios = await Usuario.find({}, {'_id': 1, 'nick': 1});
+                     const { n } = req.params;
+                     usuarios = await Usuario.find({nick : new RegExp(n, 'i')}, {'_id': 1, 'nick': 1, 'fotoPerfil': 1});
                      res.status(200).json(usuarios); 
               }
               
@@ -121,9 +124,12 @@ async function loginUsuario(req, res) {
                                    
                             }
                             else{
-                                   return res.status(200).send({message: "Not Match"});
+                                   return res.status(200).send({message: "Contraseña Incorrecta"});
                             }
                      })
+              }
+              else{
+                     return res.status(200).send({message: "No existe el usuario"});
               }
        }
        catch (err) {
@@ -145,9 +151,11 @@ async function addMensaje(req, res) {
               else{  
                      const usu = await Usuario.findOne({'nick': nick}).exec();
                      var usuRed = new UsuRed({
+                            idUsu: usu._id,
                             nombre: usu.nombre,
                             apellidos: usu.apellidos,
-                            nick: usu.nick
+                            nick: usu.nick,
+                            fotoPerfil: usu.fotoPerfil
                      });
                      var conv = new Conver({
                             usuarioEmisor: usuRed,
@@ -241,5 +249,23 @@ async function addNoti(req, res) {
        }
 }
 
+
+async function getConversacion(req, res) {
+       try {  
+           const {id} = req.params;
+           console.log(id);
+           const {idConv} = req.params;
+           console.log(idConv);
+           const conv = await Usuario.findOne({'_id': id, 'conversaciones._id': idConv}, {'conversaciones.mensajes.$': 1});
+           console.log(conv);
+           res.status(200).send(conv);
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+
+
 module.exports = {createUsuario, deleteUsuario, updateUsuario, getUsuario, getUsuarios, 
-       loginUsuario, addMensaje, follow, addNoti, unfollow, isFollowed};
+       loginUsuario, addMensaje, follow, addNoti, unfollow, isFollowed, getConversacion};

@@ -1,7 +1,10 @@
+
+
 export class publi{
     constructor( 
             public _id : string,
-            public usuario : string, 
+            public usuario : {idUsu : string, nombre : string, apellidos : string,
+                 nick :string, fotoPerfil :string}, 
             public titulo : string, 
             public etapas : Array<etapa>, 
             public fecha : string, 
@@ -32,6 +35,7 @@ class comentario{
     constructor(
         public _id : string,
         public texto : string,
-        public likes: number
+        public likes: number,
+        public nick: string
     ){}
 }

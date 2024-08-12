@@ -7,7 +7,7 @@ exports.createToken =  function(user){
         user_id : user._id,
         nick : user.nick,
         iat : moment().unix(),
-        exp : moment().add(1, 'd').unix()
+        exp : moment().add(3, 'hours').unix()
     }
 
     return jwt.sign(payload, 'VrsaWikiTourljko');

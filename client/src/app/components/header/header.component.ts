@@ -3,11 +3,13 @@ import { UsersService } from '../../services/users.service';
 import { Router, RouterLink } from '@angular/router';
 import { BehaviorSubject, debounceTime, distinctUntilChanged, map } from 'rxjs';
 import { user } from '../../models/user';
+import { FormsModule } from '@angular/forms';
+import { NgArrayPipesModule } from 'ngx-pipes';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, FormsModule, NgArrayPipesModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -19,8 +21,7 @@ export class HeaderComponent implements OnInit, DoCheck{
     userService: UsersService = new UsersService;
     identity: any;
     id: string = "";
-    search$ = new BehaviorSubject<string>('');
-    //listUsers = user[];
+    searching : boolean = false;
 
     ngOnInit(): void {
       this.token = this.userService.getToken();
@@ -36,13 +37,4 @@ export class HeaderComponent implements OnInit, DoCheck{
       this.router.navigate(['/login']);
     }
     
-    //terminar busqueda de usuarios
-    /*filterList(){
-      this.search$.pipe(
-        debounceTime(400), distinctUntilChanged(), 
-        map(term => {
-          return this.listUsers.filter(item => item.toLowerCase().indexOf(term.toLowerCase()) >= 0);
-        })
-      );
-    }*/
 }

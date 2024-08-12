@@ -7,7 +7,9 @@ var apiR = express.Router();
 
 apiR.route("/user/:id").get(UsuarioController.getUsuario).delete(UsuarioController.deleteUsuario);
 
-apiR.route("/users").get(UsuarioController.getUsuarios);
+apiR.route("/users/:n").get(UsuarioController.getUsuarios);
+
+apiR.route('/userConv/:id/:idConv').get(UsuarioController.getConversacion);
 
 apiR.route("/user/upd/:id").post(UsuarioController.updateUsuario);
 

@@ -105,7 +105,6 @@ async function addLike(req, res) {
 async function createPubli(req, res) {
     try { 
            const publi = await Publicacion.create(req.body);
-           //console.log(req.body);
            res.status(200).send(publi);
     }
     catch (err) {
@@ -147,9 +146,23 @@ async function getPubli(req, res) {
     }
 }
 
+async function getLastPublis(req,res) {
+       
+       try {
+              const publis = await Publicacion.find({},{'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1}).limit(50);
+              res.status(200).json(publis);
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
 async function getPublis(req, res) {
     try {
-           const publis = await Publicacion.find({}, {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1});
+           const {n} = req.params;
+           const publis = await Publicacion.find({$or : [{'titulo': new RegExp(n, 'i')}, {'pais': new RegExp(n, 'i')}, 
+              {'continente': new RegExp(n, 'i')}, {'ciudad': new RegExp(n, 'i')}]}, 
+              {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1});
            res.status(200).json(publis);
     }
     catch (err) {
@@ -163,6 +176,7 @@ module.exports = {
     updatePubli,
     getPubli,
     getPublis,
+    getLastPublis,
     addLike,
     deleteLike,
     addComment,
