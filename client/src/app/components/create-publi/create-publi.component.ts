@@ -44,8 +44,13 @@ export class CreatePubliComponent {
     }))
   }
 
+  deleteEtapa() {
+    if(this.etapas.length > 1){
+      this.etapas.pop();
+    }
+  }
+
   async onSubmit() {
-    //this.formCreatePubli.addControl('usuario', new FormControl<string>(this.user.nick));
     let usuario = '"usuario": { "idUsu": "' + this.user._id + '", "nombre": "' + this.user.nombre + 
     '", "apellidos": "' + this.user.apellidos + '", "nick": "' + this.user.nick + '"}'
     console.log(this.formCreatePubli.value);

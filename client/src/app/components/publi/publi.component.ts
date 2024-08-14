@@ -68,7 +68,8 @@ export class PubliComponent implements OnInit{
   addLike(){
     this.publiService.addLike(this.id, this.userId).subscribe(
       {next: (response) => {
-        location.reload();
+        this.router.navigateByUrl('/',{skipLocationChange:true}).then(()=>{
+        this.router.navigate(['/publi/' + this.id])});
       },
       error: (e) => console.error(e)
       }
@@ -79,7 +80,8 @@ export class PubliComponent implements OnInit{
   deleteLike(){
     this.publiService.deleteLike(this.id, this.userId).subscribe(
       {next: (response) => {
-        location.reload();
+        this.router.navigateByUrl('/',{skipLocationChange:true}).then(()=>{
+        this.router.navigate(['/publi/' + this.id])});
       },
       error: (e) => console.error(e)
       }
@@ -92,7 +94,8 @@ export class PubliComponent implements OnInit{
     console.log(this.comment.value);
     this.publiService.addComent(this.comment.value, this.id).subscribe(
       {next: (response) => {
-        location.reload();
+        this.router.navigateByUrl('/',{skipLocationChange:true}).then(()=>{
+          this.router.navigate(['/publi/' + this.id])});
       },
       error: (e) => console.error(e)
       }

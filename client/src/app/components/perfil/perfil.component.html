@@ -17,22 +17,22 @@
                   style="width: 150px; z-index: 1">
                 }
                   @if(!miPerfil()){
-                    <button  type="button" class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                    <button  type="button" class="btn btn-outline-dark" style="z-index: 1;">
                       Mensaje
                     </button>
                     @if(isFollow == true){
-                    <button  type="button" (click)='unfollow()' class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                    <button  type="button" (click)='unfollow()' class="btn btn-outline-dark"  style="z-index: 1;">
                       Dejar de seguir
                     </button>
                     }
                     @else{
-                    <button  type="button" (click)='follow()' class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                    <button  type="button" (click)='follow()' class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="z-index: 1;">
                       Seguir
                     </button>
                     }
                   }
                   @else{
-                    <button  type="button" routerLink="/perfilData" class="btn btn-outline-dark text-body" data-mdb-ripple-color="dark" style="z-index: 1;">
+                    <button  type="button" routerLink="/perfilData" class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="z-index: 1;">
                       Editar perfil
                     </button>
                   }
@@ -47,20 +47,77 @@
               <div class="d-flex justify-content-end text-center py-1 text-body">
                 <div>
                   <p class="mb-1 h5">{{user.publicaciones}}</p>
+                  <button style="background:none; border:none;" (click)="getTours()">
                   <p class="small text-muted mb-0">Tours</p>
+                  </button>
                 </div>
                 <div class="px-3">
+                  
                   <p class="mb-1 h5">{{user.numSeguidores}}</p>
+                  <button style="background:none; border:none;" (click)="getSeguidores()">
                   <p class="small text-muted mb-0">Seguidores</p>
+                  </button>
                 </div>
                 <div>
-                  <p class="mb-1 h5">{{user.numSeguidores}}</p>
+                  
+                  <p class="mb-1 h5">{{user.numSeguidos}}</p>
+                  <button style="background:none; border:none;" (click)="getSeguidos()">
                   <p class="small text-muted mb-0">Seguidos</p>
+                  </button>
                 </div>
               </div>
             </div>
             <div class="card-body p-4 text-black">
+              @if(tours){
+                @for(pub of toursList | paginate : { itemsPerPage: 15, currentPage: p }; track $index){
+                  <div class="container mt-4">  
+    
+                    <div class="card p-3">
+                        <div class="row">
+                            <div class="col-md-4">
+                              <a class="nav-link" routerLink="/publi/{{pub._id}}"> 
+                                <div class="position-relative snipimage">
+                                   <!-- <img src="images/tourGen.jpg" class="rounded img-fluid w-100 img-responsive">-->
+                                </div> 
+                              </a>
+                            </div>
+                         
+                            <div class="col-md-8">
+                                <div class="mt-2">
+                                  <a class="nav-link" routerLink="/publi/{{pub._id}}"> 
+                                  <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-1 titulo">{{pub.titulo}}</h5>
+                                  </div>
+                                  </a>
+                                  <div class="d-flex justify-content-md-start justify-content-between views-content mt-2">  
+                                      <div class="d-flex flex-row align-items-center ms-2">
+                                          <i class="fa fa-heart"></i>
+                                          <a class="nav-link" routerLink="/publis/{{pub.ciudad}}">
+                                             <span class="ms-1 views">{{pub.ciudad}}</span>
+                                          </a>
+                                          <a class="nav-link" routerLink="/publis/{{pub.pais}}">
+                                              <span class="ms-1 views">{{pub.pais}}</span>
+                                          </a>
+                                          <a class="nav-link" routerLink="/publis/{{pub.continente}}">
+                                              <span class="ms-1 views">{{pub.continente}}</span>
+                                          </a>
+                                      </div>  
+                                  </div>
+                                </div>     
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+              }
               
+              <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+              }
+              @else if(seguidores){
+                <p>SEGUIDORES</p>
+              }
+              @else if(seguidos){
+                <p>SEGUIDOS</p>
+              }
             </div>
           </div>
         </div>

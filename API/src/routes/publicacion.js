@@ -12,6 +12,8 @@ apiR.route("/publi").post(PublicacionController.createPubli);
 
 apiR.route("/publis/:n").get(PublicacionController.getPublis);
 
+apiR.route("/publisUser/:idUsu").get(PublicacionController.getPublisUser);
+
 apiR.route("/publis").get(PublicacionController.getLastPublis);
 
 apiR.route("/publi/upd/:id").post(PublicacionController.updatePubli);

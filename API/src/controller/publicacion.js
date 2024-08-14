@@ -170,6 +170,18 @@ async function getPublis(req, res) {
     }
 }
 
+async function getPublisUser(req, res) {
+       try {
+              const {idUsu} = req.params;
+              const publis = await Publicacion.find({'usuario.idUsu': idUsu}, 
+                 {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1});
+              res.status(200).json(publis);
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+   }
+
 module.exports = {
     createPubli,
     deletePubli,
@@ -182,5 +194,6 @@ module.exports = {
     addComment,
     deleteComment,
     addCambio,
-    aceptCambio
+    aceptCambio,
+    getPublisUser
 }

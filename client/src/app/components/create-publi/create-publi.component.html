@@ -1,37 +1,40 @@
-<div class="col-lg-6 mx-auto reg">
-    <h1>CREAR PUBLICACION</h1>
-    <form [formGroup]="formCreatePubli" (ngSubmit)="onSubmit()">
-        <div class="mb-2">
-            <label for="titulo">Titulo</label>
-            <input type="text" id="titulo" class="form-control" formControlName="titulo">
-        </div>
-        <div class="mb-2">
-            <label for="pais">Pais</label>
-            <input type="text" id="pais" class="form-control" formControlName="pais">
-        </div>
-        <div class="mb-2">
-            <label for="ciudad">Ciudad</label>
-            <input type="text" id="ciudad" class="form-control" formControlName="ciudad">
-        </div>
-        <div class="mb-2">
-            <label for="continente">Continente</label>
-            <input type="text" id="continente" class="form-control" formControlName="continente">
-        </div>
-        @for(et of etapas; track $index){
-            <form [formGroup]="etapas[$index]">
-            <div class="mb-2">
-                <label for="titulo{{$index}}">Titulo Etapa {{$index + 1}}</label>
-                <input type="text" id="titulo{{$index}}" class="form-control" formControlName="titulo">
-            </div>
-            <div class="mb-2">
-                <label for="etapa{{$index}}">Texto Etapa {{$index + 1}}</label>
-                <input type="text" id="etapa{{$index}}" class="form-control" formControlName="texto">
-            </div>
+<div class="container mt-5 todo">
+    <div class="row">
+        <div class="col-lg-8">
+            <form [formGroup]="formCreatePubli" (ngSubmit)="onSubmit()">
+            <article>
+                <header class="mb-4">
+                    <h1 class="fw-bolder mb-1">Titulo :</h1>
+                    <input type="text" id="titulo" class="form-control" formControlName="titulo">
+                </header>
+                
+                <input type="text" id="continente" class="form-control" formControlName="continente">
+                <input type="text" id="pais" class="form-control" formControlName="pais">
+                <input type="text" id="ciudad" class="form-control" formControlName="ciudad">
+                
+                <section class="mb-5">
+                    @for(et of etapas; track $index){
+                    <form [formGroup]="etapas[$index]">
+                    <h2 class="fw-bolder mb-1">Etapa {{$index + 1}}:</h2>
+                    <label for="titulo{{$index}}">Titulo: </label>
+                    <input type="text" id="titulo{{$index}}" class="form-control" formControlName="titulo">
+                    <br>
+                    <textarea class="form-control" formControlName="texto" id="etapa{{$index}}" rows="3" placeholder="Escribe la etapa"></textarea>
+                    </form>
+                }
+                </section>
+                <div class="mb-2">
+                    <button type="button" (click)="addEtapa()">Añadir Etapa</button>
+                </div>
+                @if(etapas.length > 1){
+                <div class="mb-2">
+                    <button type="button" (click)="deleteEtapa()">Quitar Etapa</button>
+                </div>
+                }
+                
+            </article>
+                <input type="submit" [disabled]="!formCreatePubli.valid" value="Crear Publi" class="btn btn-primary">
             </form>
-        }
-        <div class="mb-2">
-        <button type="button" (click)="addEtapa()">Añadir Etapa</button>
         </div>
-        <input type="submit" [disabled]="!formCreatePubli.valid" value="Crear Publi" class="btn btn-primary">
-    </form>
+    </div>
 </div>

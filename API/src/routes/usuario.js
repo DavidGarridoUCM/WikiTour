@@ -5,7 +5,7 @@ var UsuarioController = require("../controller/usuario");
 
 var apiR = express.Router();
 
-apiR.route("/user/:id").get(UsuarioController.getUsuario).delete(UsuarioController.deleteUsuario);
+apiR.route("/userP/:id").get(UsuarioController.getUsuario).delete(UsuarioController.deleteUsuario);
 
 apiR.route("/users/:n").get(UsuarioController.getUsuarios);
 

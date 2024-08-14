@@ -89,7 +89,7 @@ async function getUsuarios(req, res) {
               }
               else {
                      const { n } = req.params;
-                     usuarios = await Usuario.find({nick : new RegExp(n, 'i')}, {'_id': 1, 'nick': 1, 'fotoPerfil': 1});
+                     usuarios = await Usuario.find({nick : new RegExp(n, 'i')}, {'_id': 1, 'nick': 1, 'nombre':1, 'apellidos':1, 'fotoPerfil': 1});
                      res.status(200).json(usuarios); 
               }
               
@@ -175,7 +175,7 @@ async function isFollowed(req, res){
        try {  
               var idSeguidor  = req.body.idSeguidor;
               var idSeguido = req.body.idSeguido;
-              const usu = await Usuario.findOne({'_id': idSeguido, 'seguidores': idSeguidor}).exec();
+              const usu = await Usuario.findOne({'_id': idSeguido, 'seguidores._id': idSeguidor}).exec();
               res.status(200).send(usu);
               
        }
@@ -190,8 +190,12 @@ async function follow(req, res) {
        try {  
               var idSeguidor  = req.body.idSeguidor;
               var idSeguido = req.body.idSeguido;
-              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$addToSet : {'seguidores' : idSeguidor}, $inc: {'numSeguidores': 1}}).exec();
-              await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$addToSet : {'seguidos' : idSeguido}, $inc: {'numSeguidos': 1}}).exec();
+              var seguidor = await Usuario.findOne({'_id': idSeguidor}, {'_id': 1, 'nombre': 1,
+                     'apellidos': 1, 'nick': 1, 'fotoPerfil': 1});
+              var seguido = await Usuario.findOne({'_id': idSeguido}, {'_id': 1, 'nombre': 1,
+                     'apellidos': 1, 'nick': 1, 'fotoPerfil': 1});
+              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$addToSet : {'seguidores' : seguidor}, $inc: {'numSeguidores': 1}}).exec();
+              await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$addToSet : {'seguidos' : seguido}, $inc: {'numSeguidos': 1}}).exec();
               res.status(200).send({message: "Follow hecho"});
        }
        catch (err) {
@@ -203,8 +207,8 @@ async function unfollow(req, res) {
        try {  
               var idSeguidor  = req.body.idSeguidor;
               var idSeguido = req.body.idSeguido;
-              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$pull : {'seguidores' : idSeguidor}, $inc: {'numSeguidores': -1}}).exec();
-              await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$pull : {'seguidos' : idSeguido}, $inc: {'numSeguidos': -1}}).exec();
+              await Usuario.findOneAndUpdate({'_id': idSeguido}, {$pull : {'seguidores' : {'_id' : idSeguidor} }, $inc: {'numSeguidores': -1}}).exec();
+              await Usuario.findOneAndUpdate({'_id': idSeguidor}, {$pull : {'seguidos' : {'_id': idSeguido}}, $inc: {'numSeguidos': -1}}).exec();
               res.status(200).send({message: "Unfollow"});
        }
        catch (err) {

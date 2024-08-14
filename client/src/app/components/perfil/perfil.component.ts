@@ -3,11 +3,14 @@ import { UsersService } from '../../services/users.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map, tap } from 'rxjs';
 import { user } from '../../models/user';
+import { PubliService } from '../../services/publi.service';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { NgArrayPipesModule } from 'ngx-pipes';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgxPaginationModule, NgArrayPipesModule],
   templateUrl: './perfil.component.html',
   styleUrl: './perfil.component.scss'
 })
@@ -15,12 +18,20 @@ export class PerfilComponent implements OnInit{
     
     
     private usersService = inject(UsersService);
+    private publiService = inject(PubliService);
+    public p: number = 1;
     private router: Router = new Router;
     private route = inject(ActivatedRoute);
     public user: user = new user('', '', '', '', '', '', '', -1, '', 0, 0, 0);
     private id: any;
     private iden = this.usersService.getIdentity();
     public isFollow!: boolean;
+    public toursList: Array<{_id:string, titulo:string, pais:string, ciudad:string, continente:string}> = [];
+    public seguidoresList: Array<{_id: string, nick: string, fotoPerfil: string}> = [];
+    public seguidosList: Array<{_id: string, nick: string, fotoPerfil: string}> = [];
+    public tours!: boolean;
+    public seguidores!: boolean;
+    public seguidos!: boolean;
 
     
     
@@ -31,9 +42,11 @@ export class PerfilComponent implements OnInit{
     loadPage(){
       this.id = this.route.snapshot.params['id'];
       this.getUser(this.id);
-      this.isFollowed();
+      if(this.id != this.iden._id){
+        this.isFollowed();
+      }
+      this.getTours();
     }
-    
 
     getUser(id: any){
       this.usersService.getUser(id).subscribe(
@@ -53,6 +66,35 @@ export class PerfilComponent implements OnInit{
       else{
         return false;
       }
+    }
+
+    getTours(){
+      this.seguidores = false;
+      this.tours =  true;
+      this.seguidos = false;
+      this.seguidoresList = [];
+      this.seguidosList = [];
+      this.publiService.getPublisUser(this.id).subscribe({next: (response) => {
+        this.toursList = response;
+      },
+      error: (e) => console.error(e)
+      });
+    }
+
+    getSeguidos(){
+      this.seguidores = false;
+      this.tours = false;
+      this.seguidos = true;
+      this.seguidoresList = [];
+      this.toursList = [];
+    }
+
+    getSeguidores(){
+      this.seguidores = true;
+      this.tours =  false;
+      this.seguidos = false;
+      this.seguidosList = [];
+      this.toursList = [];
     }
 
 
@@ -97,6 +139,10 @@ export class PerfilComponent implements OnInit{
           }
         }
       });
+    }
+
+    pageChanged(e:any){
+      this.p = e;
     }
 
 }

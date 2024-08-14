@@ -17,7 +17,7 @@ export class UsersComponent implements OnInit{
     
     
     private usersService = inject(UsersService);
-    public users : Array<{_id : string, nick: string, fotoPerfil: string}>  = [];
+    public users : Array<{_id : string, nombre:string, apellidos:string, nick: string, fotoPerfil: string}>  = [];
     public _id : string = '';
     public p: number = 1;
     public nick = '';

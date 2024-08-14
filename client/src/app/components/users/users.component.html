@@ -1,22 +1,32 @@
-<div class="search-fields">
-    <input
-      type="text"
-      [(ngModel)]="nick"
-      placeholder="Nick"
-      (keyup)="lista()"
-    />
-  </div>
-  <div class="users" >
+<div class="row height d-flex justify-content-center align-items-center mt-3">
+    <div class="col-md-6">
+    
+        <div class="form">
+          <i class="fa fa-search"></i>
+          <input type="text" class="form-control form-input" [(ngModel)]="nick"
+          placeholder="Nombre de usuario..."
+          (keyup)="lista()">
+        </div>
+        
+      </div>
+</div>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
     @for(user of users | paginate : { itemsPerPage: 15, currentPage: p }; track $index){
         @if(user._id != _id){
-            <div class="user">
+          
             <a class="nav-link" routerLink="/perfil/{{user._id}}">
-            <h1>{{user.nick}}</h1>
-            </a>
+            <div class="col mb-3">
+                <div class="card-body text-center">
+                  <img src="/images/userGenProfile.jpg" style="width:100px;margin-top: 5px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
+                  <h5 class="card-title">{{user.nick}}</h5>
+                  <p class="text-secondary mb-1">{{user.nombre + '' + user.apellidos}}</p>
+                </div>
             </div>
+          
+          </a>
         }
         
       }
+</div>
       <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente" ></pagination-controls>
 
-    </div>
