@@ -57,4 +57,28 @@ export class PubliService {
     const headers = new HttpHeaders({'Content-Type' : 'application/json'});
     return this.httpClient.post<any>(this.urlBase + '/dislike/' + id, body, {headers: headers});
   }
+
+  subirFotos(id: string, params: Array<string>, file: File, name: string){
+
+		return new Promise((resolve, reject) =>{
+			var formData: any = new FormData();
+			var xhr = new XMLHttpRequest();
+
+			formData.append(name, file, file.name);
+
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4){
+					if (xhr.status == 200){
+						resolve(JSON.parse(xhr.response));
+					}else{
+						reject(xhr.response);
+					}
+				}
+			}
+			xhr.open('POST', this.urlBase + '-uploadImage/' + id, true);
+			xhr.send(formData);
+		});
+	}
+
+
 }

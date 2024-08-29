@@ -5,6 +5,15 @@ var PublicacionController = require("../controller/publicacion");
 
 var apiR = express.Router();
 
+const multipart = require('connect-multiparty');
+const multipartMiddleware = multipart({
+    uploadDir: './upload'
+});
+
+apiR.post('/publi-uploadImage/:id', multipartMiddleware, PublicacionController.uploadFotos);
+
+apiR.get('/publi/fotoPortada/:foto', PublicacionController.getFoto);
+
 apiR.route("/publi/:id").get(PublicacionController.getPubli).
 put(PublicacionController.updatePubli).delete(PublicacionController.deletePubli);
 

@@ -8,8 +8,11 @@
                     <input type="text" id="titulo" class="form-control" formControlName="titulo">
                 </header>
                 
+                <h5 class="fw-bolder mb-1">Continente :</h5>
                 <input type="text" id="continente" class="form-control" formControlName="continente">
+                <h5 class="fw-bolder mb-1">Pais :</h5>
                 <input type="text" id="pais" class="form-control" formControlName="pais">
+                <h5 class="fw-bolder mb-1">Ciudad :</h5>
                 <input type="text" id="ciudad" class="form-control" formControlName="ciudad">
                 
                 <section class="mb-5">
@@ -31,9 +34,14 @@
                     <button type="button" (click)="deleteEtapa()">Quitar Etapa</button>
                 </div>
                 }
+                <label for="fotosEtapa">Subir foto de portada</label>
+                <br>
+                <input type="file" id="fotosEtapa" accept="image/png, image/jpeg" (change)="fileChangeEvent($event)">
+                
                 
             </article>
-                <input type="submit" [disabled]="!formCreatePubli.valid" value="Crear Publi" class="btn btn-primary">
+            <br>
+                <input type="submit" [disabled]="!formCreatePubli.valid || etapasValids() == false" value="Crear Publi" class="btn btn-primary">
             </form>
         </div>
     </div>

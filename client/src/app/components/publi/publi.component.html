@@ -8,20 +8,21 @@
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1">{{publi.titulo}}</h1>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted by {{publi.usuario.nick}}</div>
+                    <a class="nav-link" routerLink="/perfil/{{publi.usuario.idUsu}}"><div class="text-muted fst-italic mb-2">Posted by {{publi.usuario.nick}}</div></a>
                     <!-- Post categories-->
                     <a class="badge bg-secondary text-decoration-none link-light" routerLink="/publis/{{publi.ciudad}}">{{publi.ciudad}}</a>
                     <a class="badge bg-secondary text-decoration-none link-light" routerLink="/publis/{{publi.pais}}">{{publi.pais}}</a>
                     <a class="badge bg-secondary text-decoration-none link-light" routerLink="/publis/{{publi.continente}}">{{publi.continente}}</a>
                 </header>
                 <!-- Preview image figure-->
-                <!--<figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>-->
+                 @if(publi.foto){
+                    <figure class="mb-4"><img class="img-fluid rounded" src='{{url + publi.foto}}' style="height: 400px;"/></figure>
+                }
                 <!-- Post content-->
-                
                 <section class="mb-5">
                     @for(et of publi.etapas; track $index){
                     <h2 class="fw-bolder mb-1">{{et.titulo}}</h2>
-                    <div class="text-muted fst-italic mb-2">Posted by {{et.usuario}}</div>
+                    <a class="nav-link" routerLink="/perfil/{{et.idUsu}}"> <div class="text-muted fst-italic mb-2">Posted by {{et.usuario}}</div></a>
                     <p class="fs-5 mb-4">{{et.texto}}</p>
                 }
                 </section>
@@ -52,9 +53,8 @@
                         @if(publi.comentarios.length != 0){
                             @for(c of publi.comentarios; track $index){
                                 <div class="d-flex">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
                                     <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
+                                     <a class="nav-link" routerLink="/perfil/{{c.idUsu}}"><div class="fw-bold">{{c.nick}}</div></a>   
                                         <p>{{c.texto}}</p>
                                     </div>
                                 </div>

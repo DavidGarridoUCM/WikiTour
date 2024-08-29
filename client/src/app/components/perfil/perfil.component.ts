@@ -26,12 +26,14 @@ export class PerfilComponent implements OnInit{
     private id: any;
     private iden = this.usersService.getIdentity();
     public isFollow!: boolean;
-    public toursList: Array<{_id:string, titulo:string, pais:string, ciudad:string, continente:string}> = [];
-    public seguidoresList: Array<{_id: string, nick: string, fotoPerfil: string}> = [];
-    public seguidosList: Array<{_id: string, nick: string, fotoPerfil: string}> = [];
+    public toursList: Array<{_id:string, titulo:string, pais:string, ciudad:string, continente:string, foto:string}> = [];
+    public seguidoresList: Array<user> = [];
+    public seguidosList: Array<user> = [];
     public tours!: boolean;
     public seguidores!: boolean;
     public seguidos!: boolean;
+    public url: string = 'http://localhost:3800/user/fotoPerfil/';
+    public urlPub: string = 'http://localhost:3800/publi/fotoPortada/';
 
     
     
@@ -74,7 +76,8 @@ export class PerfilComponent implements OnInit{
       this.seguidos = false;
       this.seguidoresList = [];
       this.seguidosList = [];
-      this.publiService.getPublisUser(this.id).subscribe({next: (response) => {
+      this.publiService.getPublisUser(this.id).subscribe(
+      {next: (response) => {
         this.toursList = response;
       },
       error: (e) => console.error(e)
@@ -87,6 +90,12 @@ export class PerfilComponent implements OnInit{
       this.seguidos = true;
       this.seguidoresList = [];
       this.toursList = [];
+      this.usersService.getSeguidos(this.id).subscribe(
+      {next: (response) => {
+        this.seguidosList = response.seguidos;
+      },
+      error: (e) => console.error(e)
+      });
     }
 
     getSeguidores(){
@@ -95,6 +104,12 @@ export class PerfilComponent implements OnInit{
       this.seguidos = false;
       this.seguidosList = [];
       this.toursList = [];
+      this.usersService.getSeguidores(this.id).subscribe(
+        {next: (response) => {
+          this.seguidoresList = response.seguidores;
+        },
+        error: (e) => console.error(e)
+        });
     }
 
 

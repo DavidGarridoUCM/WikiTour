@@ -16,7 +16,7 @@ import { user } from '../../models/user';
 export class ModificarTourComponent implements OnInit{
   
   public publi: publi = new publi('', {idUsu : '', nombre : '', apellidos : '',
-    nick :'', fotoPerfil :''}, '', [], '', 0, [], [], -1, '', '', '');
+    nick :'', fotoPerfil :''}, '', [], '', 0, [], [], -1, '', '', '', '');
   private publiService = inject(PubliService);
   private usersService = inject(UsersService);
   private router: Router = new Router;
@@ -41,7 +41,8 @@ export class ModificarTourComponent implements OnInit{
           this.publi = response;
           for(const et of response.etapas){
             this.etapas.push(new FormGroup({
-              texto: new FormControl<string>(et.texto, Validators.required),
+              titulo: new FormControl<string>(et.titulo, Validators.required),
+              texto: new FormControl<string>(et.texto, Validators.required)
             }));
             this.initialValue.push(et.texto);
           }
@@ -57,6 +58,7 @@ export class ModificarTourComponent implements OnInit{
     for(const e of this.etapas){
       if(e.value.texto != this.initialValue[index]){
         this.publi.etapas[index].usuario = this.user.nick;
+        this.publi.etapas[index].idUsu = this.user._id;
         this.publi.etapas[index].texto = e.value.texto;
       }
       index++;

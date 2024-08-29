@@ -1,5 +1,5 @@
 @if(token){
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar w-100 navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" routerLink="/home">WIKITOUR</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,16 +15,10 @@
             <a class="nav-link" routerLink="/perfil/{{identity._id}}"><i class="bi bi-person-fill"></i>PERFIL</a>
           </li>
           <li class="nav-item d-none d-lg-block">
-            <a class="nav-link" href="#" title="MENSAJES"><i class="bi bi-envelope"></i></a>
-          </li>
-          <li class="nav-item d-lg-none">
-            <a class="nav-link" href="#"><i class="bi bi-envelope"></i>MENSAJES</a>
-          </li>
-          <li class="nav-item d-none d-lg-block">
             <a class="nav-link" routerLink="/users" title="USUARIOS"><i class="bi bi-search"></i></a>
           </li>
           <li class="nav-item d-lg-none">
-            <a class="nav-link" routerLink="/users"><i class="bi bi-person-fill"></i>USUARIOS</a>
+            <a class="nav-link" routerLink="/users"><i class="bi bi-search"></i>USUARIOS</a>
           </li>
           <li class="nav-item d-none d-lg-block">
             <a class="nav-link" role="button" (click)="logout()" title="LOGOUT"><i class="bi bi-box-arrow-right"></i></a>

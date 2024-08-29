@@ -3,6 +3,9 @@
 const {Publicacion, UsuPRed} = require('../models/publicacion');
 const {Usuario} = require('../models/usuario');
 
+const fs = require('fs');
+const path = require('path');
+
 //Añadir propuesta cambio de etapa
 async function addCambio(req, res) {
        try {  
@@ -105,6 +108,7 @@ async function addLike(req, res) {
 async function createPubli(req, res) {
     try { 
            const publi = await Publicacion.create(req.body);
+           Usuario.updateOne({'_id': publi.usuario.idUsu}, {$inc : {'publicaciones': 1}}).exec();
            res.status(200).send(publi);
     }
     catch (err) {
@@ -149,7 +153,7 @@ async function getPubli(req, res) {
 async function getLastPublis(req,res) {
        
        try {
-              const publis = await Publicacion.find({},{'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1}).limit(50);
+              const publis = await Publicacion.find({},{'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1, 'foto': 1}).sort({'fecha': -1}).limit(50);
               res.status(200).json(publis);
        }
        catch (err) {
@@ -162,7 +166,7 @@ async function getPublis(req, res) {
            const {n} = req.params;
            const publis = await Publicacion.find({$or : [{'titulo': new RegExp(n, 'i')}, {'pais': new RegExp(n, 'i')}, 
               {'continente': new RegExp(n, 'i')}, {'ciudad': new RegExp(n, 'i')}]}, 
-              {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1});
+              {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1, 'foto': 1}).sort({'fecha': -1});
            res.status(200).json(publis);
     }
     catch (err) {
@@ -174,13 +178,64 @@ async function getPublisUser(req, res) {
        try {
               const {idUsu} = req.params;
               const publis = await Publicacion.find({'usuario.idUsu': idUsu}, 
-                 {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1});
+                 {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'foto': 1}).sort({'fecha': -1});
               res.status(200).json(publis);
        }
        catch (err) {
               console.log(err.message);
        }
-   }
+}
+
+async function uploadFotos(req, res) {
+       try {  
+           if(req.files){
+              console.log(req.files);
+              const{id} = req.params;
+              var file_path =  req.files.image.path;
+              var file_split = file_path.split('\\');
+              var file_name = file_split[1];
+              var ext_spl = file_name.split('\.');
+              var ext = ext_spl[1];
+              if(ext == 'jpeg' || ext == 'jpg' || ext == 'png'){
+                     
+                     const usu = await Publicacion.findOneAndUpdate({'_id': id}, {'foto': file_name});
+                     return res.status(200).send(usu);
+              }
+              else{
+                     //quitar de carpeta upload
+                     fs.unlink(file_path, (err) => {
+                            return res.status(500).send({message: 'Extension no valida'})
+                     });
+              }
+              
+           }
+           else{
+              return res.status(500).send({message: 'No existen imagenes'});
+           }
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+async function getFoto(req, res) {
+       try {  
+           var nombre_imagen =  req.params.foto;
+           var path_file = './upload/' + nombre_imagen;
+
+           fs.stat(path_file, fs.constants.R_OK, (err) => {
+              if (err){
+                     return res.status(500).send({message: 'No existe la imagen'});
+              }
+              else{
+                     return res.sendFile(path.resolve(path_file));
+              }
+              })
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
 
 module.exports = {
     createPubli,
@@ -195,5 +250,7 @@ module.exports = {
     deleteComment,
     addCambio,
     aceptCambio,
-    getPublisUser
+    getPublisUser, 
+    uploadFotos,
+    getFoto
 }

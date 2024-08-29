@@ -1,32 +1,36 @@
 'use strict'
 const {Usuario, UsuRed, Conver, Noti} = require('../models/usuario');
+const {Publicacion} = require('../models/publicacion');
 var bcrypt = require('bcrypt-nodejs');
 const jwt = require('../../services/jwt');
 const { default: mongoose } = require('mongoose');
+const fs = require('fs');
+const path = require('path');
  
 async function createUsuario(req, res) {
        try {  
+              if(await Usuario.findOne({'email': req.body.email})){
+                     return res.status(500).send({message: "Ya existe una cuenta con ese mail"});
+              }
+              if(await Usuario.findOne({'nick': req.body.nick})){
+                     return res.status(500).send({message: "Ya existe ese nombre de usuario"});
+              }
               const usu = await Usuario.create(req.body);           
-              res.status(200).send({
+              return res.status(200).send({
                      token : jwt.createToken(usu)
               })
        }
        catch (err) {
-              if (err.keyValue.email != null && err.name === "MongoServerError" && err.code === 11000) {
-                     res.status(500).send({message: "Ya existe una cuenta con ese mail"});
-              } else if (err.keyValue.nick != null && err.name === "MongoServerError" && err.code === 11000) {
-                     res.status(500).send({message: "Ya existe ese nombre de usuario"});
-              } else {
-                     res.status(500).send(err.message);
-              }
+                     return res.status(500).send(err.message);
        }
+       
 }
 
 async function deleteUsuario(req, res) {
        try {
               const { id } = req.params;
               const usu = await Usuario.findByIdAndDelete(id);
-              res.status(200);
+              res.status(200).send(usu);
        }
        catch (err) {
               console.log(err.message);
@@ -47,6 +51,9 @@ async function updateUsuario(req, res) {
                                           req.body.password = req.body.newPassword;
                                    }
                                    const us = await Usuario.findByIdAndUpdate(usu._id, req.body);
+                                   const user = await Usuario.findOne({'_id': usu._id}, {'nick': 1, 'nombre': 1, 'apellidos': 1, 'fotoPerfil': 1});
+                                   Publicacion.updateMany({'usuario.idUsu' : usu._id}, {'usuario.nick': user.nick, 'usuario.nombre': user.nombre, 
+                                          'usuario.apellidos': user.apellidos, 'usuario.fotoPerfil': user.fotoPerfil}).exec();
                                    return res.status(200).send(us);
                             }
                             else{
@@ -75,28 +82,41 @@ async function getUsuario(req, res) {
 async function getUsuarios(req, res) {
        try {
               var usuarios;
-              if(res.tipo == 'seguidos'){
-                     const { id } = req.params;
-                     usuarios = await Usuario.find({'_id': id}, {'seguidos': 1, '_id': 0});
-              }
-              else if(res.tipo == "seguidores"){
-                     const { id } = req.params;
-                     usuarios = await Usuario.find({'_id': id}, {'seguidores': 1, '_id': 0});
-              }
-              else if(res.tipo == "bloqueados"){
-                     const { id } = req.params;
-                     usuarios = await Usuario.find({'_id': id}, {'bloqueados': 1, '_id': 0});
-              }
-              else {
-                     const { n } = req.params;
-                     usuarios = await Usuario.find({nick : new RegExp(n, 'i')}, {'_id': 1, 'nick': 1, 'nombre':1, 'apellidos':1, 'fotoPerfil': 1});
-                     res.status(200).json(usuarios); 
-              }
+              const { n } = req.params;
+              usuarios = await Usuario.find({nick : new RegExp(n, 'i')}, {'_id': 1, 'nick': 1, 'nombre':1, 'apellidos':1, 'fotoPerfil': 1});
+              res.status(200).json(usuarios); 
               
        }
        catch (err) {
               console.log(err.message);
        }
+}
+
+async function getSeguidos(req, res) {
+       try{   
+              var usuarios;
+              const { id } = req.params;
+              usuarios = await Usuario.findOne({'_id': id}, {'seguidos': 1, '_id': 0});
+              console.log(usuarios);
+              res.status(200).json(usuarios);
+       }
+       catch(err) {
+              console.log(err.message);
+       }
+       
+}
+
+async function getSeguidores(req, res) {
+       try{   
+              var usuarios;
+              const { id } = req.params;
+              usuarios = await Usuario.findOne({'_id': id}, {'seguidores': 1, '_id': 0});
+              res.status(200).json(usuarios);
+       }
+       catch(err) {
+              console.log(err.message);
+       }
+       
 }
 
 async function loginUsuario(req, res) {
@@ -269,7 +289,58 @@ async function getConversacion(req, res) {
        }
 }
 
+async function uploadFotoPerfil(req, res) {
+       try {  
+           if(req.files){
+              console.log(req.files);
+              const{id} = req.params;
+              var file_path = req.files.image.path;
+              var file_split = file_path.split('\\');
+              var file_name = file_split[1];
+              var ext_spl = file_name.split('\.');
+              var ext = ext_spl[1];
+              if(ext == 'jpeg' || ext == 'jpg' || ext == 'png'){
+                     //meter en fotoperfil usuario
+                     const usu = await Usuario.findOneAndUpdate({'_id': id}, {'fotoPerfil': file_name});
+                     return res.status(200).send(usu)
+              }
+              else{
+                     //quitar de carpeta upload
+                     fs.unlink(file_path, (err) => {
+                            return res.status(500).send({message: 'Extension no valida'})
+                     });
+              }
+           }
+           else{
+              return res.status(500).send({message: 'No existen imagenes'});
+           }
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+async function getFotoPerfil(req, res) {
+       try {  
+           var nombre_imagen =  req.params.fotoPerfil;
+           var path_file = './upload/' + nombre_imagen;
+
+           fs.stat(path_file, fs.constants.R_OK, (err) => {
+              if (err){
+                     return res.status(500).send({message: 'No existe la imagen'});
+              }
+              else{
+                     return res.sendFile(path.resolve(path_file));
+              }
+              })
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+
 
 
 module.exports = {createUsuario, deleteUsuario, updateUsuario, getUsuario, getUsuarios, 
-       loginUsuario, addMensaje, follow, addNoti, unfollow, isFollowed, getConversacion};
+       loginUsuario, addMensaje, follow, addNoti, unfollow, isFollowed, getConversacion, getSeguidos, getSeguidores, uploadFotoPerfil, getFotoPerfil};

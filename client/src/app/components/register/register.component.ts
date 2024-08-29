@@ -41,7 +41,8 @@ export class RegisterComponent{
               this.login();
             },
           error: (err) => {
-              console.log(err.errorMessage);
+            alert(err.error.message);
+              console.log(err);
             }
           }
         );

@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('mongoose-bcrypt');
 const { response } = require('express');
 
-//meter foto de perfil aqui y en los usos en el controller, etc
+
 const userRedSchema = mongoose.Schema({
     idUsu:{
         type: String,
@@ -20,10 +20,12 @@ const userRedSchema = mongoose.Schema({
     },
     nick: {
         type: String,
+        unique: true,
         required: true
     },
-    fotoPerfil:{
-        type: String
+    fotoPerfil: {
+        type: String,
+        default: null
     }},
     {
         autoCreate: false,
@@ -125,8 +127,14 @@ const userSchema = mongoose.Schema({
         required: [true, "La contraseña es necesaria"],
         bcrypt: true
     },
-    fotoPerfil: String,
-    biografia: String,
+    fotoPerfil: {
+        type: String,
+        default: null
+    },
+    biografia: {
+        type: String,
+        default: null
+    },
     rol: {
         type: String,
         enum: ['user', 'admin'],
@@ -145,9 +153,7 @@ const userSchema = mongoose.Schema({
         default : 0
     },
     seguidos : [userRedSchema],
-    seguidores : [userRedSchema],
-    notificaciones: [notiSchema],
-    conversaciones:[conversacionSchema]
+    seguidores : [userRedSchema]
 },
 {
 collection: "usuarios"

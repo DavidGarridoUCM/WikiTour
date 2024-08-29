@@ -14,12 +14,10 @@ export class publi{
             public puntuacion : number, 
             public ciudad : string, 
             public continente : string, 
-            public pais : string
+            public pais : string,
+            public foto : string
     ){}
 }
-
-
-//Se cambia la etapa directamente, tambien podria haber propuestos y aceptarlos
 
 class etapa{
     constructor(
@@ -27,7 +25,8 @@ class etapa{
         public titulo : string,
         public texto : string,
         public adjuntos : Array<string>,
-        public usuario : string
+        public usuario : string,
+        public idUsu : string
     ){}
 }
 
@@ -35,7 +34,7 @@ class comentario{
     constructor(
         public _id : string,
         public texto : string,
-        public likes: number,
-        public nick: string
+        public nick: string,
+        public idUsu: string
     ){}
 }

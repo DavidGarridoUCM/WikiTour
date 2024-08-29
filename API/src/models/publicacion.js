@@ -20,7 +20,10 @@ const userRedPSchema = mongoose.Schema({
         unique: true,
         required: true
     },
-    fotoPerfil: String
+    fotoPerfil: {
+        type: String,
+        default: null
+    }
 },
 {
     autoCreate: false,
@@ -64,19 +67,29 @@ const etapaSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    texto: {
+    idUsu:{
         type: String,
         required: true
     },
-    adjuntos:[adjuntoSchema]
+    texto: {
+        type: String,
+        required: true
+    }
 });
 
 const comentSchema = mongoose.Schema({
-    texto: {
+    idUsu: {
         type: String,
         required: true
     },
-    likes: Number
+    nick: {
+        type: String,
+        required: true
+    },
+    texto: {
+        type: String,
+        required: true
+    }
 });
 
 const publicacion = mongoose.Schema({
@@ -102,7 +115,6 @@ const publicacion = mongoose.Schema({
     },
     likes:[String],
     comentarios:[comentSchema],
-    puntuacion:Number,
     ciudad:{
         type: String,
         required: true
@@ -114,7 +126,8 @@ const publicacion = mongoose.Schema({
     pais:{
         type: String,
         required: true
-    }
+    },
+    foto: String
 },
 {
 collection: "publicaciones"

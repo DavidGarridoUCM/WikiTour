@@ -21,6 +21,7 @@ export class UsersComponent implements OnInit{
     public _id : string = '';
     public p: number = 1;
     public nick = '';
+    public url: string = 'http://localhost:3800/user/fotoPerfil/';
 
     ngOnInit(): void {
           this._id = this.usersService.getIdentity()._id;
@@ -45,8 +46,7 @@ export class UsersComponent implements OnInit{
         {
           next: (response) => {
             if(response != undefined){
-              this.users = response; 
-              console.log(response);
+              this.users = response;
             }
           },
           error: (e) => console.error(e)

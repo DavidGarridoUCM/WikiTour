@@ -25,7 +25,6 @@ export class LoginComponent{
     onSubmit() {
       this.usersService.login(this.formLog.value).subscribe(
         {next: (response) => {
-          console.log(response);
           if(response._id){
             this.logtoken();
           }

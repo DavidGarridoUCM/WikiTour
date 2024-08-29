@@ -20,13 +20,15 @@
                 
                 <section class="mb-5">
                     @for(et of publi.etapas; track $index){
-                    <h2 class="fw-bolder mb-1">{{et.titulo}}</h2>
-                    <div class="text-muted fst-italic mb-2">Posted by {{et.usuario}}</div>
+                    <div class="mb-2">
+                        <h2 class="fw-bolder mb-1">{{et.titulo}}</h2>
+                    </div>
                     <form [formGroup]="etapas[$index]">
                         <div class="mb-2">
-                            <input type="text" id="etapa{{$index}}" class="form-control" formControlName="texto">
+                            <textarea class="form-control" formControlName="texto" id="etapa{{$index}}" rows="3" placeholder="Escribe la etapa"></textarea>
                         </div>
                     </form>
+                    <div class="text-muted fst-italic mb-2">Posted by {{et.usuario}}</div>
                 }
                 </section>
             </article>

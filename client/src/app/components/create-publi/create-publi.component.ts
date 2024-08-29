@@ -17,6 +17,7 @@ export class CreatePubliComponent {
   private usersService = inject(UsersService);
   private router: Router = new Router;
   private route = inject(ActivatedRoute);
+  public fotosTour : any;
   public formCreatePubli : FormGroup;
   public etapas : Array<FormGroup> = [];
   public user: user = new user('', '', '', '', '', '', '', 0, '', 0, 0, 0);
@@ -44,15 +45,29 @@ export class CreatePubliComponent {
     }))
   }
 
+  etapasValids() : boolean{
+    var r : boolean = true
+    for(const e of this.etapas){
+      if(!e.valid){
+        r = false;
+      }
+    }
+    return r;
+  }
+
   deleteEtapa() {
     if(this.etapas.length > 1){
       this.etapas.pop();
     }
   }
 
+  fileChangeEvent(event:any){
+    this.fotosTour = <File>event.target.files[0];
+  }
+
   async onSubmit() {
     let usuario = '"usuario": { "idUsu": "' + this.user._id + '", "nombre": "' + this.user.nombre + 
-    '", "apellidos": "' + this.user.apellidos + '", "nick": "' + this.user.nick + '"}'
+    '", "apellidos": "' + this.user.apellidos + '", "nick": "' + this.user.nick + '", "fotoPerfil": "' + this.user.fotoPerfil + '"}'
     console.log(this.formCreatePubli.value);
     let b = JSON.stringify(this.formCreatePubli.value);
     let body = b.slice(0, -1);
@@ -60,22 +75,25 @@ export class CreatePubliComponent {
     let index = 1;
     for(const et of this.etapas){
       et.addControl('usuario', new FormControl<string>(this.user.nick));
+      et.addControl('idUsu', new FormControl<string>(this.user._id));
       etap += JSON.stringify(et.value) + ',';
       index++;
     }
     let etapas = etap.slice(0, -1);
     body += etapas + "]," + usuario + "}";
-    console.log(body);
     await this.publiService.createPubli(body).subscribe(
-      {next: () => {
-        this.router.navigate(['']);
+      {next: (response) => {
+        console.log(response);
+        if(this.fotosTour != null){
+          this.publiService.subirFotos(response._id, [], this.fotosTour, 'image');
+        }
+        this.router.navigate(['/publi/' + response._id]);
       },
       error: (err) => {
         console.log(err.errorMessage);
       }
     }
     );
-    //Devolver el id de la publi al crearlo y mandar a la pagina de esa publi
   }
 
 

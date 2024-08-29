@@ -20,6 +20,8 @@ export class ShowPublisComponent implements OnInit, DoCheck{
   public p: number = 1;
   public search : string = '';
   private route = inject(ActivatedRoute);
+  public url: string = 'http://localhost:3800/publi/fotoPortada/';
+  public urlUser: string = 'http://localhost:3800/user/fotoPerfil/';
 
   ngDoCheck(): void {
     if(this.route.snapshot.params['search']){
@@ -59,7 +61,6 @@ export class ShowPublisComponent implements OnInit, DoCheck{
       {next: (response) => {
         if(response != undefined){
           this.publis = response;
-          console.log(response);
         }
       },
       error: (e) => console.error(e)
@@ -72,7 +73,6 @@ export class ShowPublisComponent implements OnInit, DoCheck{
       {next: (response) => {
         if(response != undefined){
           this.publis = response;
-          console.log(response);
         }
       },
       error: (e) => console.error(e)

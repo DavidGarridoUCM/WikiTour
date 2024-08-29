@@ -18,6 +18,10 @@ export class PubliComponent implements OnInit{
   private userService = inject(UsersService);
   private id: any;
   public userId : string = '';
+  public nick : string = '';
+  public nombre : string = '';
+  public apellidos : string = '';
+  public fotoPerfil : string = '';
   private router: Router = new Router;
   private route = inject(ActivatedRoute);
   public like!: boolean;
@@ -25,11 +29,17 @@ export class PubliComponent implements OnInit{
   public etapasUsers : Array<String> = [];
   public namePubli : String = '';
   public publi: publi = new publi('', {idUsu : '', nombre : '', apellidos : '',
-    nick :'', fotoPerfil :''}, '', [], '', 0, [], [], -1, '', '', '');
+    nick :'', fotoPerfil :''}, '', [], '', 0, [], [], -1, '', '', '', '');
+  public url: string = 'http://localhost:3800/publi/fotoPortada/';
 
   constructor() {
+    this.nick = this.userService.getIdentity().nick;
+    this.userId = this.userService.getIdentity()._id;
     this.comment = new FormGroup({
-      texto: new FormControl<string>('', Validators.required)
+      texto: new FormControl<string>('', Validators.required),
+      idUsu: new FormControl<string>(this.userId),
+      nick: new FormControl<string>(this.nick),
+      
     });
   }
 
@@ -90,7 +100,6 @@ export class PubliComponent implements OnInit{
   }
 
   addComent(){
-    //this.comment.addControl('usuario', new FormControl<string>(this.nick));
     console.log(this.comment.value);
     this.publiService.addComent(this.comment.value, this.id).subscribe(
       {next: (response) => {
