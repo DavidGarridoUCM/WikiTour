@@ -116,42 +116,42 @@
               <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
               }
               @else if(seguidores){
-                <ul class="list-group list-group-light">
-                  @for(us of seguidoresList | paginate : { itemsPerPage: 30, currentPage: p }; track $index){
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
+                  @for(us of seguidoresList | paginate : { itemsPerPage: 10, currentPage: p }; track $index){
                     <a class="nav-link" routerLink="/perfil/{{us._id}}">
-                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="d-flex align-items-center">
-                      <img src="images/userGenProfile.jpg" alt="" style="width: 45px; height: 45px"
-                        class="rounded-circle" />
-                      <div class="ms-3">
-                        <p class="text-muted mb-0">{{us.nick}}</p>
+                      <div class="col mb-3 card">
+                          <div class="card-body text-center">
+                            
+                            <img src="/images/userGenProfile.jpg" style="width:100px;margin-top: 5px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
+                            
+                            <h5 class="card-title">{{us.nick}}</h5>
+                            
+                          </div>
                       </div>
-                    </div>
-                    <span class="badge rounded-pill badge-success">Active</span>
-                    </li>
+                    
                     </a>
                 }
-                <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
-                </ul>
+              </div>
+              <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
               }
               @else if(seguidos){
-                <ul class="list-group list-group-light">
-                  @for(us of seguidosList | paginate : { itemsPerPage: 30, currentPage: p }; track $index){
-                  <a class="nav-link" routerLink="/perfil/{{us._id}}">
-                  <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="d-flex align-items-center">
-                      <img src="images/userGenProfile.jpg" alt="" style="width: 45px; height: 45px"
-                        class="rounded-circle" />
-                      <div class="ms-3">
-                        <p class="text-muted mb-0">{{us.nick}}</p>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 gutters-sm">
+                  @for(us of seguidosList | paginate : { itemsPerPage: 10, currentPage: p }; track $index){
+                    <a class="nav-link" routerLink="/perfil/{{us._id}}">
+                      <div class="col mb-3 card">
+                          <div class="card-body text-center">
+                            
+                            <img src="/images/userGenProfile.jpg" style="width:100px;margin-top: 5px" alt="User" class="img-fluid img-thumbnail rounded-circle border-0 mb-3">
+                            
+                            <h5 class="card-title">{{us.nick}}</h5>
+                            
+                          </div>
                       </div>
-                    </div>
-                    <span class="badge rounded-pill badge-success">Active</span>
-                  </li>
-                  </a>
+                    
+                    </a>
                 }
-                  <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
-                </ul>
+              </div>
+              <pagination-controls (pageChange)="pageChanged($event)" [autoHide]="true" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
               }
             </div>
           </div>

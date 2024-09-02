@@ -135,11 +135,6 @@ const userSchema = mongoose.Schema({
         type: String,
         default: null
     },
-    rol: {
-        type: String,
-        enum: ['user', 'admin'],
-        default:'user'
-    },
     numSeguidores: {
         type : Number,
         default : 0
