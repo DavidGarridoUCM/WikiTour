@@ -1,18 +1,7 @@
 
-<div class="row height d-flex justify-content-center align-items-center mt-3">
-  <div class="col-lg-3">
-    <a class="nav-link" routerLink="/crearPubli"><button class="btn btn-success pull-right" > Crear publicacion</button></a>
-  </div>
-<div class="col-md-5">
-    <div class="form">
-      <i class="fa fa-search"></i>
-      <input type="text" class="form-control form-input" [(ngModel)]="search"
-      placeholder="Buscar por Título, ciudad, pais, continente ..."
-      (keyup)="lista()">
-    </div>  
-</div>
+<h1>¿DONDE HA ESTADO LA GENTE QUE SIGUES?</h1>
 
-</div>
+
 
 @for(pub of publis | paginate : { itemsPerPage: 15, currentPage: p }; track $index){
     <div class="container mt-4">

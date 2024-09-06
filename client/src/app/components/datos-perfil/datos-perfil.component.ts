@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { user } from '../../models/user';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Observable, tap } from 'rxjs';
+import { PubliService } from '../../services/publi.service';
 
 @Component({
   selector: 'app-datos-perfil',
@@ -24,6 +25,7 @@ export class DatosPerfilComponent {
   private StrongPasswordRegx: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%?&])[A-Za-z\d$@$!%?&]{8,}$/;
   public formLog: FormGroup;
   public url: string = 'http://localhost:3800/user/fotoPerfil/';
+  public borrarFoto: boolean = false;
 
   constructor(){
     this.user = this.usersService.getIdentity();
@@ -45,6 +47,11 @@ export class DatosPerfilComponent {
     this.fotoPerfil = <File>event.target.files[0];
   }
 
+  deleteFoto(){
+    this.borrarFoto = true;
+    this.user.fotoPerfil = '';
+  }
+
 
   async onSubmit() {
     if(!this.formChange.valid){
@@ -52,16 +59,40 @@ export class DatosPerfilComponent {
     }
     else{
       if(this.fotoPerfil){
+        if(this.user.fotoPerfil != null || this.user.fotoPerfil != '' || this.user.fotoPerfil != 'null'){
+          this.usersService.deleteFotoPerfil(this.user._id).subscribe(
+            { next: (response) => {
+              
+            },
+            error: (error) => {
+              var errorMessage = <any>error;
+              if (errorMessage != null) {
+                console.log('Error');
+              }
+            }
+          });
+        }
         this.usersService.subirFotoPerfil(this.user._id, [], this.fotoPerfil, 'image').then((result: any) => {
-          console.log(result);
           this.user.fotoPerfil = result.fotoPerfil;
-          localStorage.setItem('identity', JSON.stringify(this.user));
+          localStorage.setItem('Identity', JSON.stringify(this.user));
+        });
+      }
+      else if(this.borrarFoto == true){
+        this.usersService.deleteFotoPerfil(this.user._id).subscribe(
+          { next: (response) => {
+            localStorage.setItem('Identity', JSON.stringify(this.user));
+          },
+          error: (error) => {
+            var errorMessage = <any>error;
+            if (errorMessage != null) {
+              console.log('Error');
+            }
+          }
         });
       }
       this.usersService.updateUser(this.user._id, this.formChange.value).subscribe(
        {next: (response) => {
           if(response != undefined){
-            console.log(this.user.nick);
             this.formLog.controls['nick'].setValue(this.user.nick);
             if(this.formChange.value.newPassword != ''){
               this.formLog.controls['password'].setValue(this.formChange.value.newPassword);
@@ -74,7 +105,6 @@ export class DatosPerfilComponent {
           }
         },
         error: (e) => {
-          console.log(e);
           if(e.error.message == 'Not Match'){
             alert("La contraseña actual es incorrecta");
           }
@@ -105,7 +135,6 @@ export class DatosPerfilComponent {
     this.formLog.addControl('gettoken', new FormControl<boolean>(true));
     this.usersService.loginToken(this.formLog.value).subscribe(
     {next: () => {
-        //this.router.navigate(['']); //Cuando haga el home que lleve a home o a timeline
       },
     error: (err) => {
       console.log(err.errorMessage);

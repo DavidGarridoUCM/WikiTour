@@ -192,8 +192,8 @@ export class UsersService {
 		});
 	}
 
-  deleteUser(id: any): Observable<any>{
-    return this.httpClient.delete<any>(this.urlBase + 'P/' + id);
+  deleteFotoPerfil(id: string) : Observable<any>{
+    return this.httpClient.delete<any>(this.urlBase + '/delete-fotoPerfil/' + id);
   }
 
 }

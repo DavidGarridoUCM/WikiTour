@@ -11,10 +11,12 @@ import { PubliComponent } from './components/publi/publi.component';
 import { ModificarTourComponent } from './components/modificar-tour/modificar-tour.component';
 import { ShowPublisComponent } from './components/show-publis/show-publis.component';
 import { UsersComponent } from './components/users/users.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
 
 export const routes: Routes = [
-    {path: "", component: ShowPublisComponent, canActivate: [AuthGuard]},
-    {path: "home", component: ShowPublisComponent, canActivate: [AuthGuard]},
+    {path: "", component: TimelineComponent, canActivate: [AuthGuard]},
+    {path: "home", component: TimelineComponent, canActivate: [AuthGuard]},
+    {path: "publis", component: ShowPublisComponent, canActivate: [AuthGuard]},
     {path: "publis/:search", component: ShowPublisComponent, canActivate: [AuthGuard]},
     {path: "register", component: RegisterComponent, canActivate: [AuthenticatedGuard]},
     {path: "login", component: LoginComponent, canActivate: [AuthenticatedGuard]},

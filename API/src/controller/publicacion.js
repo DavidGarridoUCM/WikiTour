@@ -6,6 +6,7 @@ const {Usuario} = require('../models/usuario');
 const fs = require('fs');
 const path = require('path');
 
+/*
 //Añadir propuesta cambio de etapa
 async function addCambio(req, res) {
        try {  
@@ -53,7 +54,7 @@ async function aceptCambio(req, res) {
        catch (err) {
               console.log(err.message);
        }
-}
+}*/
 
 //Eliminar comentario
 async function deleteComment(req, res) {
@@ -98,6 +99,18 @@ async function addLike(req, res) {
               const userId = req.body.userId;
               const publi = await Publicacion.updateOne({'_id': id}, {$inc : {'numlikes': 1}, $push: {'likes': userId}});
               res.status(200).json(publi.likes);
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+}
+
+async function updatePerfilPublis(req, res) {
+       try {  
+              const {id} = req.params;
+              const pub = await Publicacion.updateMany({'usuario.idUsu' : id}, {'usuario.nick': user.nick, 'usuario.nombre': user.nombre, 
+                                          'usuario.apellidos': user.apellidos, 'usuario.fotoPerfil': user.fotoPerfil});
+              res.status(200).json(pub);
        }
        catch (err) {
               console.log(err.message);
@@ -174,6 +187,25 @@ async function getPublis(req, res) {
     }
 }
 
+async function getPublisFollows(req, res) {
+       try {
+              const {id} = req.params;
+              var resul = await Usuario.findOne({'_id': id});
+              var seguidos = [];
+              resul.seguidos.forEach((seg) => 
+              {
+                    seguidos.push(seg._id);
+              });
+              const publis = await Publicacion.find({'usuario.idUsu' : {$in: seguidos}}, 
+                 {'_id': 1, 'titulo': 1, 'pais': 1, 'continente': 1, 'ciudad': 1, 'usuario': 1, 'foto': 1}).sort({'fecha': -1}).limit(200);
+              res.status(200).json(publis);
+       }
+       catch (err) {
+              console.log(err.message);
+       }
+   }
+
+
 async function getPublisUser(req, res) {
        try {
               const {idUsu} = req.params;
@@ -189,7 +221,6 @@ async function getPublisUser(req, res) {
 async function uploadFotos(req, res) {
        try {  
            if(req.files){
-              console.log(req.files);
               const{id} = req.params;
               var file_path =  req.files.image.path;
               var file_split = file_path.split('\\');
@@ -248,9 +279,11 @@ module.exports = {
     deleteLike,
     addComment,
     deleteComment,
-    addCambio,
-    aceptCambio,
+    /*addCambio,
+    aceptCambio,*/
     getPublisUser, 
     uploadFotos,
-    getFoto
+    getFoto,
+    getPublisFollows,
+    updatePerfilPublis
 }

@@ -36,7 +36,7 @@
                                         <!-- Image upload -->
                                          
                                             <div class="imagen square position-relative display-2 mb-3">
-                                                @if(user.fotoPerfil == null){
+                                                @if(user.fotoPerfil == null || user.fotoPerfil == ''){
                                                 <i class="bi bi-image"></i>
                                                 }
                                                 @else{
@@ -48,7 +48,7 @@
                                          
                                         <!-- Button -->
                                         
-                                        @if(user.fotoPerfil == null){
+                                        @if(user.fotoPerfil == null || user.fotoPerfil == ''){
                                             <label for="fotoPerfil">Subir foto de perfil</label>
                                             <br>
                                             <br>
@@ -61,7 +61,7 @@
                                             <input type="file" id="fotoPerfil" accept="image/png, image/jpeg" (change)="fileChangeEvent($event)">
                                             <br>
                                             <br>
-                                            <button type="button" class="btn btn-danger-soft">Eliminar</button>
+                                            <button type="button" (click)="deleteFoto()" class="btn btn-danger-soft">Eliminar</button>
                                         }
                                         
                                     </div>

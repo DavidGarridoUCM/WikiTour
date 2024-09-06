@@ -8,7 +8,7 @@
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1">{{publi.titulo}}</h1>
                     <!-- Post meta content-->
-                    <a class="nav-link" routerLink="/perfil/{{publi.usuario.idUsu}}"><div class="text-muted fst-italic mb-2">Posted by {{publi.usuario.nick}}</div></a>
+                    <a class="nav-link" routerLink="/perfil/{{publi.usuario.idUsu}}"><div class="text-muted fst-italic mb-2">Posted by {{publi.usuario.nick}} at {{fecha()}}</div></a>
                     <!-- Post categories-->
                     <a class="badge bg-secondary text-decoration-none link-light" routerLink="/publis/{{publi.ciudad}}">{{publi.ciudad}}</a>
                     <a class="badge bg-secondary text-decoration-none link-light" routerLink="/publis/{{publi.pais}}">{{publi.pais}}</a>

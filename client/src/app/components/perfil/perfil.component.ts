@@ -16,7 +16,6 @@ import { NgArrayPipesModule } from 'ngx-pipes';
 })
 export class PerfilComponent implements OnInit{
     
-    
     private usersService = inject(UsersService);
     private publiService = inject(PubliService);
     public p: number = 1;

@@ -56,6 +56,10 @@ export class PubliComponent implements OnInit{
     }
   }
 
+  fecha() : string{
+    return this.publi.fecha.slice(8, 10) + '/' + this.publi.fecha.slice(5, 7) + '/' + this.publi.fecha.slice(0, 4);
+  }
+
   loadPage(){
     this.id = this.route.snapshot.params['id'];
     this.userId = this.userService.getIdentity()._id;

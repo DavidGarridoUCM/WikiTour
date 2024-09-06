@@ -58,6 +58,10 @@ export class PubliService {
     return this.httpClient.post<any>(this.urlBase + '/dislike/' + id, body, {headers: headers});
   }
 
+  getPublisFoll(id: any) : Observable<any>{
+    return this.httpClient.get<any>(this.urlBase + 's-follows/' + id);
+  }
+
   subirFotos(id: string, params: Array<string>, file: File, name: string){
 
 		return new Promise((resolve, reject) =>{

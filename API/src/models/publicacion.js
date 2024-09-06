@@ -30,7 +30,7 @@ const userRedPSchema = mongoose.Schema({
     autoIndex: false
 });
 
-const adjuntoSchema = mongoose.Schema({
+/*const adjuntoSchema = mongoose.Schema({
     tipo: {
         type: String,
         required: true
@@ -39,9 +39,9 @@ const adjuntoSchema = mongoose.Schema({
         type: String,
         required: true
     }
-});
+});*/
 
-const cambioSchema = mongoose.Schema({
+/*const cambioSchema = mongoose.Schema({
     texto: {
         type: String,
         required: true
@@ -55,7 +55,7 @@ const cambioSchema = mongoose.Schema({
         type: Date, 
         default: Date.now
     }
-});
+});*/
 
 
 const etapaSchema = mongoose.Schema({

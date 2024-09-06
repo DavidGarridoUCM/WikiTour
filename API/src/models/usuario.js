@@ -32,7 +32,7 @@ const userRedSchema = mongoose.Schema({
         autoIndex: false
 });
 
-const notiSchema = mongoose.Schema({
+/*const notiSchema = mongoose.Schema({
     tipo: {
         type: String,
         enum: ['follow', 'mensaje', 'like', 'coment'],
@@ -49,9 +49,9 @@ const notiSchema = mongoose.Schema({
     {
         autoCreate: false,
         autoIndex: false
-});
+});*/
 
-const adjuntoSchema = mongoose.Schema({
+/*const adjuntoSchema = mongoose.Schema({
     tipo: {
         type: String,
         enum: ['ubicacion', 'imagen', 'link'],
@@ -100,7 +100,7 @@ const conversacionSchema = mongoose.Schema({
     {
         autoCreate: false,
         autoIndex: false
-    });
+    });*/
 
 const userSchema = mongoose.Schema({
     nombre: {
@@ -157,8 +157,8 @@ collection: "usuarios"
 userSchema.plugin(bcrypt);
 const Usuario = mongoose.model('Usuario', userSchema);
 const UsuRed = mongoose.model('UsuRed', userRedSchema);
-const Conver = mongoose.model('Conver', conversacionSchema);
-const Noti = mongoose.model('Noti', notiSchema);
-module.exports = {Usuario: Usuario, UsuRed: UsuRed, Conver: Conver, Noti: Noti};
+//const Conver = mongoose.model('Conver', conversacionSchema);
+//const Noti = mongoose.model('Noti', notiSchema);
+module.exports = {Usuario: Usuario, UsuRed: UsuRed/*, Conver: Conver, Noti: Noti*/};
 
 

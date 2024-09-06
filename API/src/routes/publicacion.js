@@ -14,6 +14,10 @@ apiR.post('/publi-uploadImage/:id', multipartMiddleware, PublicacionController.u
 
 apiR.get('/publi/fotoPortada/:foto', PublicacionController.getFoto);
 
+apiR.route("/publi-upd-user/:id").get(PublicacionController.updatePerfilPublis);
+
+apiR.get('/publis-follows/:id', PublicacionController.getPublisFollows);
+
 apiR.route("/publi/:id").get(PublicacionController.getPubli).
 put(PublicacionController.updatePubli).delete(PublicacionController.deletePubli);
 
