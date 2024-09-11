@@ -30,33 +30,6 @@ const userRedPSchema = mongoose.Schema({
     autoIndex: false
 });
 
-/*const adjuntoSchema = mongoose.Schema({
-    tipo: {
-        type: String,
-        required: true
-    },
-    adjunto: {
-        type: String,
-        required: true
-    }
-});*/
-
-/*const cambioSchema = mongoose.Schema({
-    texto: {
-        type: String,
-        required: true
-    },   
-    usuario:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
-    adjuntos:[adjuntoSchema],
-    fecha:{
-        type: Date, 
-        default: Date.now
-    }
-});*/
-
 
 const etapaSchema = mongoose.Schema({
     titulo: {

@@ -43,7 +43,7 @@ export class LoginComponent{
       this.formLog.addControl('gettoken', new FormControl<boolean>(true));
       this.usersService.loginToken(this.formLog.value).subscribe(
       {next: () => {
-          this.router.navigate(['']); //Cuando haga el home que lleve a home o a timeline
+          this.router.navigate(['']); 
         },
       error: (err) => {
         console.log(err.errorMessage);

@@ -156,38 +156,6 @@ async function loginUsuario(req, res) {
        }
 }
 
-/*async function addMensaje(req, res) {
-       try {  
-              var nick  = req.body.nick;
-              //El mensaje tiene que tener el formato que esta en el modelo y indicar si lo envias tu o lo recibes
-              var mensaje = req.body.mensaje;
-              const { id } = req.params;
-              const mens = await Usuario.findOne({'_id': id, 'conversaciones.usuarioEmisor.nick': nick}, {'conversaciones.$': 1});
-              if (mens) {
-                     await Usuario.findOneAndUpdate({'_id': id, 'conversaciones.usuarioEmisor.nick': nick}, {$push : {'conversaciones.$.mensajes' : mensaje}}, {upsert: true}).exec();
-                     res.status(200).send({message: "Updated"});
-              }
-              else{  
-                     const usu = await Usuario.findOne({'nick': nick}).exec();
-                     var usuRed = new UsuRed({
-                            idUsu: usu._id,
-                            nombre: usu.nombre,
-                            apellidos: usu.apellidos,
-                            nick: usu.nick,
-                            fotoPerfil: usu.fotoPerfil
-                     });
-                     var conv = new Conver({
-                            usuarioEmisor: usuRed,
-                            mensajes: mensaje
-                     })
-                     Usuario.findOneAndUpdate({'_id': id}, {$push: {'conversaciones': conv}}, {upsert: true}).exec();
-                     res.status(200).send({message: "Added"});
-              } 
-       }
-       catch (err) {
-              console.log(err.message);
-       }
-}*/
 
 async function isFollowed(req, res){
        try {  
@@ -233,58 +201,6 @@ async function unfollow(req, res) {
               res.status(200).send({message: "Added"});
        }
 }
-
-
-/*async function addNoti(req, res) {
-       try {  
-              var nick  = req.body.nick;
-              var typ = req.body.tipo;
-              const { id } = req.params;
-              const usu = await Usuario.findOne({'nick': nick});
-              if (usu) {
-                     var usuRed = new UsuRed({
-                            nombre: usu.nombre,
-                            apellidos: usu.apellidos,
-                            nick: usu.nick
-                     });
-                     var noti = new Noti({
-                            tipo: typ,
-                            usuario: usuRed,
-                            estado: "Sin leer"
-                     })
-                     await Usuario.findOneAndUpdate({'_id': id}, {$push : {'notificaciones' : noti}}, {upsert: true}).exec();
-                     var num = await Usuario.find({'_id': id}, {'notificaciones': 1}).count();
-                     if (num > 20){
-                            Usuario.findOneAndUpdate({'_id': id}, {$pop : {'notificaciones' : 1}}).exec();
-                     }
-                     res.status(200).send({message: "Notificacion añadida"});
-              }
-              else{
-                     //Poner error
-                     res.status(200).send({message: "Added"});
-              }
-              
-       }
-       catch (err) {
-              console.log(err.message);
-       }
-}*/
-
-
-/*async function getConversacion(req, res) {
-       try {  
-           const {id} = req.params;
-           console.log(id);
-           const {idConv} = req.params;
-           console.log(idConv);
-           const conv = await Usuario.findOne({'_id': id, 'conversaciones._id': idConv}, {'conversaciones.mensajes.$': 1});
-           console.log(conv);
-           res.status(200).send(conv);
-       }
-       catch (err) {
-              console.log(err.message);
-       }
-}*/
 
 async function uploadFotoPerfil(req, res) {
        try {  
@@ -358,4 +274,4 @@ async function deleteFotoPerfil(req, res) {
 
 
 module.exports = {createUsuario, deleteUsuario, updateUsuario, getUsuario, getUsuarios, 
-       loginUsuario, /*addMensaje, */follow,/* addNoti,*/ unfollow, isFollowed,/* getConversacion,*/ getSeguidos, getSeguidores, uploadFotoPerfil, getFotoPerfil, deleteFotoPerfil};
+       loginUsuario, follow, unfollow, isFollowed, getSeguidos, getSeguidores, uploadFotoPerfil, getFotoPerfil, deleteFotoPerfil};
